@@ -1,0 +1,253 @@
+[gd_scene load_steps=29 format=2]
+
+[ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Opponent/Opponent.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Ball/Ball.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Level/Level.gd" type="Script" id=4]
+[ext_resource path="res://assets/Sounds/533034__evretro__8-bit-game-over-soundtune.wav" type="AudioStream" id=5]
+[ext_resource path="res://assets/levelup.wav" type="AudioStream" id=6]
+[ext_resource path="res://Scenes/ParallaxBackground.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/ping_pong_8bit_plop.ogg" type="AudioStream" id=8]
+[ext_resource path="res://assets/Orbitron/Orbitron-VariableFont_wght.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://Scenes/PauseMenu.tscn" type="PackedScene" id=10]
+[ext_resource path="res://assets/Sounds/boss_sound.wav" type="AudioStream" id=11]
+[ext_resource path="res://assets/Sounds/boss_defeat.mp3" type="AudioStream" id=12]
+[ext_resource path="res://Scenes/BallTrail.tscn" type="PackedScene" id=13]
+[ext_resource path="res://assets/UI/Theme/UI.tres" type="Theme" id=14]
+[ext_resource path="res://assets/PoetsenOne-Regular.ttf" type="DynamicFontData" id=15]
+[ext_resource path="res://assets/Anta-Regular.ttf" type="DynamicFontData" id=16]
+[ext_resource path="res://achievements/Achievements_ui.tscn" type="PackedScene" id=17]
+
+[sub_resource type="Shader" id=11]
+code = "shader_type canvas_item;
+uniform float blur_amount : hint_range(0, 5);
+
+void fragment() {
+	COLOR = textureLod(SCREEN_TEXTURE, SCREEN_UV, blur_amount);
+}
+"
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = SubResource( 11 )
+shader_param/blur_amount = null
+
+[sub_resource type="DynamicFont" id=10]
+size = 40
+font_data = ExtResource( 15 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 40
+font_data = ExtResource( 15 )
+
+[sub_resource type="DynamicFont" id=5]
+size = 50
+font_data = ExtResource( 15 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 55
+font_data = ExtResource( 15 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 25
+font_data = ExtResource( 9 )
+
+[sub_resource type="DynamicFont" id=7]
+size = 55
+font_data = ExtResource( 15 )
+
+[sub_resource type="DynamicFont" id=12]
+font_data = ExtResource( 16 )
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 640, 10 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 34, 354.5 )
+
+[node name="Level" type="Node"]
+script = ExtResource( 4 )
+PlayerScore = 0
+difficultyLevel = 0
+
+[node name="ParallaxBackground" parent="." instance=ExtResource( 7 )]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.0784314, 0.129412, 0.14902, 0 )
+
+[node name="Blur" type="ColorRect" parent="."]
+material = SubResource( 9 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 1, 1, 1, 0.00392157 )
+
+[node name="PlayerScore" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -200.0
+custom_colors/font_color = Color( 0.85098, 0.847059, 0.843137, 1 )
+custom_fonts/font = SubResource( 10 )
+text = "Text"
+align = 1
+valign = 1
+
+[node name="Achievements_ui" parent="." instance=ExtResource( 17 )]
+visible = false
+
+[node name="OpponentScore" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 200.0
+custom_colors/font_color = Color( 0.85098, 0.847059, 0.843137, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Text"
+align = 1
+valign = 1
+
+[node name="CountdownLabel" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -400.0
+custom_colors/font_color = Color( 0.901961, 0.584314, 0.505882, 1 )
+custom_fonts/font = SubResource( 5 )
+text = "Ready"
+align = 1
+valign = 1
+
+[node name="GameOver" type="Label" parent="."]
+visible = false
+anchor_top = -0.268
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 6 )
+text = "Game Over"
+align = 1
+valign = 1
+
+[node name="ModeLabel" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_fonts/font = SubResource( 8 )
+text = "Mode: Classic"
+align = 1
+
+[node name="CrazyModeTime" type="Label" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -300.0
+text = "Crazy Mode Time: 0"
+align = 1
+
+[node name="LongestTime" type="Label" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 300.0
+text = "Longest Time: 0"
+align = 1
+
+[node name="YouWin" type="Label" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -207.0
+custom_fonts/font = SubResource( 7 )
+text = "You Win!"
+align = 1
+valign = 1
+
+[node name="Restart" type="Button" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 568.0
+margin_top = 425.0
+margin_right = -557.0
+margin_bottom = -229.0
+theme = ExtResource( 14 )
+custom_fonts/font = SubResource( 12 )
+text = "RESTART"
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 49, 351 )
+
+[node name="Opponent" parent="." instance=ExtResource( 2 )]
+position = Vector2( 1213, 335 )
+
+[node name="PauseMenu" parent="." instance=ExtResource( 10 )]
+visible = false
+
+[node name="Wall_Top" type="StaticBody2D" parent="."]
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall_Top"]
+position = Vector2( 640, -10 )
+shape = SubResource( 1 )
+
+[node name="Wall_Bottom" type="StaticBody2D" parent="."]
+position = Vector2( 0, 740 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall_Bottom"]
+position = Vector2( 640, -10 )
+shape = SubResource( 1 )
+
+[node name="Ball" parent="." instance=ExtResource( 3 )]
+position = Vector2( 644, 362 )
+
+[node name="BallTrail" parent="Ball" instance=ExtResource( 13 )]
+visible = false
+
+[node name="LeftWall" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+position = Vector2( -33, 358 )
+shape = SubResource( 2 )
+
+[node name="RightWall" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+position = Vector2( 1314, 359 )
+shape = SubResource( 2 )
+
+[node name="CountdownTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="ScoreSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+
+[node name="levelUpSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+
+[node name="bossSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
+
+[node name="bossdefeat" type="AudioStreamPlayer" parent="."]
+pause_mode = 1
+stream = ExtResource( 12 )
+
+[node name="gameover" type="AudioStreamPlayer" parent="."]
+pause_mode = 1
+stream = ExtResource( 5 )
+
+[node name="Label" type="Label" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 14.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 640, 361 )
+current = true
+
+[connection signal="pressed" from="Restart" to="." method="_on_Restart_pressed"]
+[connection signal="body_entered" from="LeftWall" to="." method="_on_LeftWall_body_entered"]
+[connection signal="body_entered" from="RightWall" to="." method="_on_RightWall_body_entered"]
+[connection signal="timeout" from="CountdownTimer" to="." method="_on_CountdownTimer_timeout"]

@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/pingpongbat.ogg-7e689c08413f03e5ecec457fc0498093.oggstr"
+
+[deps]
+
+source_file="res://assets/Sounds/pingpongbat.ogg"
+dest_files=[ "res://.import/pingpongbat.ogg-7e689c08413f03e5ecec457fc0498093.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

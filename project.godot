@@ -1,0 +1,48 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+[application]
+
+config/name="The Pong Dev"
+config/description="The Pong Game 1.1.0"
+run/main_scene="res://GodotLoadScreen-main/GodotLoadScreenFinal/GodotStartupScreen.tscn"
+boot_splash/show_image=false
+boot_splash/image="res://assets/Game_Logo_byDallE3.png"
+boot_splash/bg_color=Color( 0.141176, 0.141176, 0.141176, 0 )
+config/icon="res://fresh_food_apple_fruit_icon_261733.png"
+
+[autoload]
+
+MusicPlayer="*res://assets/MusicPlayer.gd"
+Global="*res://Global.gd"
+Achievements="*res://achievements/achievements.gd"
+
+[display]
+
+window/size/width=1280
+window/size/height=720
+window/stretch/mode="2d"
+window/stretch/aspect="keep"
+
+[gui]
+
+common/drop_mouse_on_gui_input_disabled=true
+
+[locale]
+
+locale_filter=[ 0, [ "zh_CN" ] ]
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"

@@ -1,0 +1,33 @@
+To achieve a blur effect in Godot, you can use a shader. Here’s a step-by-step guide on how to blur the main level when the game ends:
+
+Step 1: Create a Full-Screen ColorRect First, you need to create a full-screen ColorRect that will be used to apply the blur effect:
+
+In the Godot editor, select the + button to add a new node.
+Add a ColorRect node and name it “Blur”.
+In the Inspector, set the Color property to RGBA(255, 255, 255, 0.5). This will make the ColorRect semi-transparent.
+Set the Rect Min Size to the size of your game window (e.g., 1280, 720).
+Make sure the ColorRect is placed lower in the tree or placed in a CanvasLayer so it’s on top of the rest of the scene.
+Step 2: Create a Blur Shader Next, you need to create a blur shader and apply it to the ColorRect:
+
+Select the “Blur” ColorRect and in the Inspector, go to Material and select New ShaderMaterial.
+Click on the ShaderMaterial and select New Shader.
+Click on the Shader and you will be taken to the shader editor.
+In the shader editor, enter the following code:
+shader_type canvas_item;
+uniform float blur_amount : hint_range(0, 5);
+
+void fragment() {
+	COLOR = textureLod(SCREEN_TEXTURE, SCREEN_UV, blur_amount);
+}
+
+Step 3: Control the Blur Effect Finally, you need to control the blur effect from your main level script. You can do this by adjusting the blur_amount parameter of the shader:
+
+onready var blur = $Blur
+var blur_amount = 0
+
+func stop_game():
+	get_tree().call_group("BallGroup", "stop_ball") # Stop all balls
+	$Opponent.speed = 0 # Stop the opponent
+	$CountdownTimer.stop() # Stop the countdown timer
+	blur_amount = 5 # Set the blur amount to 5
+	blur.material.set_shader_param("blur_amount", blur_amount) # Apply the blur effect
