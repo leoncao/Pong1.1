@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/chiphead64 - 11pm.wav-d28c99888ab9b0dc31f82ed7552e7235.sample"
+type="AudioStreamWAV"
+uid="uid://xcoeh83ri1ld"
+path="res://.godot/imported/chiphead64 - 11pm.wav-d28c99888ab9b0dc31f82ed7552e7235.sample"
 
 [deps]
 
 source_file="res://assets/Sounds/chiphead64 - 11pm.wav"
-dest_files=[ "res://.import/chiphead64 - 11pm.wav-d28c99888ab9b0dc31f82ed7552e7235.sample" ]
+dest_files=["res://.godot/imported/chiphead64 - 11pm.wav-d28c99888ab9b0dc31f82ed7552e7235.sample"]
 
 [params]
 

@@ -2,14 +2,18 @@
 
 importer="mp3"
 type="AudioStreamMP3"
-path="res://.import/boss_defeat.mp3-5c1a844d1c8433556d9e3cd8d835c38e.mp3str"
+uid="uid://7jyr1t1ved5i"
+path="res://.godot/imported/boss_defeat.mp3-5c1a844d1c8433556d9e3cd8d835c38e.mp3str"
 
 [deps]
 
 source_file="res://assets/Sounds/boss_defeat.mp3"
-dest_files=[ "res://.import/boss_defeat.mp3-5c1a844d1c8433556d9e3cd8d835c38e.mp3str" ]
+dest_files=["res://.godot/imported/boss_defeat.mp3-5c1a844d1c8433556d9e3cd8d835c38e.mp3str"]
 
 [params]
 
 loop=true
 loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/533034__evretro__8-bit-game-over-soundtune.wav-8acb7e60376f1f1db2a192d32f7ca11d.sample"
+type="AudioStreamWAV"
+uid="uid://btyakojbtqo2y"
+path="res://.godot/imported/533034__evretro__8-bit-game-over-soundtune.wav-8acb7e60376f1f1db2a192d32f7ca11d.sample"
 
 [deps]
 
 source_file="res://assets/Sounds/533034__evretro__8-bit-game-over-soundtune.wav"
-dest_files=[ "res://.import/533034__evretro__8-bit-game-over-soundtune.wav-8acb7e60376f1f1db2a192d32f7ca11d.sample" ]
+dest_files=["res://.godot/imported/533034__evretro__8-bit-game-over-soundtune.wav-8acb7e60376f1f1db2a192d32f7ca11d.sample"]
 
 [params]
 
