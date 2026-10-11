@@ -17,6 +17,13 @@ var current_item_index = 0
 #3#}
 
 func _ready():
+	# 开箱抽到的球拍皮肤也显示在这里（已解锁，可以直接 CONFIRM 选用）
+	for it in Loot.owned_paddles():
+		var exists = false
+		for item in items:
+			if item['texture'] == it['texture']: exists = true
+		if not exists:
+			items.append({'texture': it['texture'], 'is_locked': false, 'price': 0})
 
 	# Load the unlocked state
 	var save_file = ConfigFile.new()

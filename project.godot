@@ -25,6 +25,7 @@ config/icon="res://fresh_food_apple_fruit_icon_261733.png"
 MusicPlayer="*res://assets/MusicPlayer.gd"
 Global="*res://Global.gd"
 Achievements="*res://achievements/achievements.gd"
+Loot="*res://Lootbox/CS2/Loot.gd"
 
 [display]
 
