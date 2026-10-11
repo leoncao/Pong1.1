@@ -215,6 +215,7 @@ func fire_decoy() -> Node:
 
 # 球进了左右边界时，关卡脚本先问一下"这是哪种球"
 func classify(body: Node) -> String:
+	if body == null: return "main"   # 防御：没有传球进来时按主球处理
 	if body.is_in_group("DecoyBall"): return "decoy"
 	if body.is_in_group("ExtraBall"): return "extra"
 	if body == main_ball: return "main"
