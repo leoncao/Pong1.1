@@ -97,15 +97,13 @@ func _on_Restart_pressed():
 	get_tree().change_scene_to_file("res://Level/CrazyMode.tscn")
 
 func save_high_score(score):
-	var file = File.new()
-	file.open("user://high_score.save", File.WRITE)
+	var file = FileAccess.open("user://high_score.save", FileAccess.WRITE)
 	file.store_var(score)
 	file.close()
 
 func load_high_score():
-	var file = File.new()
-	if file.file_exists("user://high_score.save"):
-		file.open("user://high_score.save", File.READ)
+	if FileAccess.file_exists("user://high_score.save"):
+		var file = FileAccess.open("user://high_score.save", FileAccess.READ)
 		var score = file.get_var()
 		file.close()
 		return score

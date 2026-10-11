@@ -4,10 +4,10 @@ extends VBoxContainer
 var case_opening = preload("res://Scenes and Scripts/CaseSystem.tscn")
 
 
-@export var blue_items # (Array, Texture2D)
-@export var purple_items # (Array, Texture2D)
-@export var red_items # (Array, Texture2D)
-@export var special_items # (Array, Texture2D)
+@export var blue_items: Array[Texture2D] = []
+@export var purple_items: Array[Texture2D] = []
+@export var red_items: Array[Texture2D] = []
+@export var special_items: Array[Texture2D] = []
 
 
 var item_list = {}

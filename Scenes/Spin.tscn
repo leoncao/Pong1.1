@@ -13,20 +13,18 @@ func _ready():
 	start_spinning()
 
 func start_spinning():
-	var tween = Tween.new()
-	add_child(tween)
-	tween.interpolate_property(self, \"radial_initial_angle\", 0, 360, 10, Tween.TRANS_LINEAR)
-	tween.connect(\"tween_completed\", Callable(self, \"_on_spin_complete\"))
-	tween.start()
+	var tween = create_tween()
+	tween.tween_property(self, \"radial_initial_angle\", 360.0, 10).from(0.0)
+	tween.finished.connect(_on_spin_complete)
 
-func _on_spin_complete(object: Object, key: NodePath):
+func _on_spin_complete():
 	print(\"Current angle:\", radial_initial_angle)
 	print(\"Random stopping angle:\", random_stopping_angle)
 	if abs(radial_initial_angle - random_stopping_angle) < 1.0:
 		stop_spinning()
 
 func stop_spinning():
-	get_node(\"Tween\").stop_all()
+	set_process(false)
 	print(\"Spinning stopped at angle:\", radial_initial_angle)
 	# Add your custom logic here (e.g., show a result, trigger an event, etc.)
 
@@ -49,6 +47,3 @@ texture_over = ExtResource( 1 )
 fill_mode = 4
 script = SubResource( 1 )
 
-[node name="Tween" type="Tween" parent="."]
-
-[connection signal="tween_completed" from="Tween" to="Spinwheel" method="_on_spin_complete"]

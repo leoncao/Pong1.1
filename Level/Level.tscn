@@ -21,15 +21,16 @@
 [sub_resource type="Shader" id=11]
 code = "shader_type canvas_item;
 uniform float blur_amount : hint_range(0, 5);
+uniform sampler2D screen_texture : hint_screen_texture, filter_linear_mipmap;
 
 void fragment() {
-	COLOR = textureLod(SCREEN_TEXTURE, SCREEN_UV, blur_amount);
+	COLOR = textureLod(screen_texture, SCREEN_UV, blur_amount);
 }
 "
 
 [sub_resource type="ShaderMaterial" id=9]
 shader = SubResource( 11 )
-shader_param/blur_amount = null
+shader_parameter/blur_amount = null
 
 [sub_resource type="FontFile" id=10]
 size = 40

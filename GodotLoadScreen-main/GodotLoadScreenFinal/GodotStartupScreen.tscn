@@ -101,16 +101,13 @@ modulate = Color( 1, 1, 1.3, 1 )
 position = Vector2( 160, 160 )
 z_index = 3
 
-[node name="Tween" type="Tween" parent="."]
-playback_process_mode = 0
-
 [node name="ChangeSceneTimer" type="Timer" parent="."]
-process_mode = 0
+process_callback = 0
 wait_time = 1.3
 one_shot = true
 
 [node name="AnimationPlayTimer" type="Timer" parent="."]
-process_mode = 0
+process_callback = 0
 one_shot = true
 autostart = true
 

@@ -18,4 +18,4 @@ func _on_QuitButton_pressed():
 
 
 func _on_Credit_pressed():
-	get_tree().change_scene_to_file("res://assets/godot-credits-master/GodotCredits.tscn")
+	get_tree().change_scene_to_file("res://godot-credits-master/GodotCredits.tscn")

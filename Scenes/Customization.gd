@@ -45,7 +45,8 @@ func _on_item_unlocked(texture):
 	update_item_display()  # Update the display
 	# Save the unlocked state
 	var save_file = ConfigFile.new()
-	save_file.set_value("unlocked", true)
+	save_file.load("user://unlocked.cfg")  # 原代码少写了参数(Godot 4 会直接报错)
+	save_file.set_value("unlocked", texture, true)
 	save_file.save("user://unlocked.cfg")
 #
 func _on_SelectButton_pressed():

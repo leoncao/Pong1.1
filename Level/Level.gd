@@ -11,7 +11,7 @@ var bossdefeat = load("res://assets/Sounds/boss_defeat.mp3")  # Load the "Defeat
 #bossdefeat.loop = false  # Stop the sound from looping
 var bossSound = load("res://assets/Sounds/boss_sound.wav")  # Load the "Boss" sound
 var popup = Label.new()  # Create a new Label node for the popup text
-var tween = Tween.new()  # Create a new Tween node for the animation
+var tween: Tween  # Godot 4: Tween 用 create_tween() 现做现用
 
 func _ready():
 	$CountdownTimer.start()
@@ -28,13 +28,12 @@ func _ready():
 		$Player/Sprite2D.texture = texture
 	# Add the popup and tween nodes to the scene
 	add_child(popup)
-	add_child(tween)
 	popup.text = "You reached Level 1"
 	popup.custom_minimum_size = Vector2(200, 50)  # Set the size of the popup
 	#popup.rect_centered = true  # Center the popup
-	popup.align = Label.ALIGNMENT_CENTER  # Align the text to the center
-	popup.valign = Label.VALIGN_CENTER  # Vertically align the text to the center
-	popup.position = get_viewport().size / 2 - popup.custom_minimum_size / 2 # Position the popup in the center of the screen
+	popup.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER  # Align the text to the center
+	popup.vertical_alignment = VERTICAL_ALIGNMENT_CENTER  # Vertically align the text to the center
+	popup.position = get_viewport().get_visible_rect().size / 2 - popup.custom_minimum_size / 2 # Position the popup in the center of the screen
 	popup.hide()  # Hide the popup initially
 	
 func _on_LeftWall_body_entered(body):
@@ -90,12 +89,13 @@ func score_achieved():
 		# ... rest of your code ...		# Show the level up popup
 		
 		popup.show()  # Show the popup
-		tween.interpolate_property(popup, "modulate:a", 0, 1, 1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)  # Fade in
-		tween.start()
+		popup.modulate.a = 0
+		tween = create_tween()
+		tween.tween_property(popup, "modulate:a", 1.0, 1)  # Fade in
 		await get_tree().create_timer(3).timeout  # Wait for 3 seconds
-		tween.interpolate_property(popup, "modulate:a", 1, 0, 1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)  # Fade out
-		tween.start()
-		await tween.tween_completed  # Wait for the animation to complete
+		tween = create_tween()
+		tween.tween_property(popup, "modulate:a", 0.0, 1)  # Fade out
+		await tween.finished  # Wait for the animation to complete
 		popup.hide()  # Hide the popup
 	
 	if PlayerScore == 25: 

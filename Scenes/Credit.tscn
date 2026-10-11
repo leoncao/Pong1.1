@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Assets/PoetsenOne-Regular.ttf" type="FontFile" id=1]
+[ext_resource path="res://assets/PoetsenOne-Regular.ttf" type="FontFile" id=1]
 [ext_resource path="res://Scenes/HowToPlay.gd" type="Script" id=2]
-[ext_resource path="res://Assets/Anta-Regular.ttf" type="FontFile" id=3]
+[ext_resource path="res://assets/Anta-Regular.ttf" type="FontFile" id=3]
 [ext_resource path="res://assets/UI/Theme/UI.tres" type="Theme" id=4]
 [ext_resource path="res://assets/UI/50x50/Icon_Return.png" type="Texture2D" id=5]
 

@@ -5,7 +5,7 @@
 [ext_resource path="res://assets/UI/ExportedIcons/ExportedIcons/Icon_Magic.png" type="Texture2D" id=3]
 [ext_resource path="res://assets/UI/ExportedIcons/ExportedIcons/Icon_Plant.png" type="Texture2D" id=4]
 [ext_resource path="res://assets/Paddle/star.png" type="Texture2D" id=5]
-[ext_resource path="res://Assets/Ultimateboss1.png" type="Texture2D" id=6]
+[ext_resource path="res://assets/Ultimateboss1.png" type="Texture2D" id=6]
 
 [node name="Case" type="VBoxContainer"]
 anchor_right = 0.242188

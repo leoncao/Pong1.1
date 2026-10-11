@@ -5,12 +5,13 @@ var speed = 300  # Define the speed variable
 var colors = Color.MAROON
 var frame_count = 0
 func _ready():
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING  # 和 Godot 3 一样：没有"地板"概念
 	randomize()
 	ball = get_parent().find_child("CrazyBall")
 
 func _physics_process(delta):
 	speed = ball.speed # Set the AI speed to be the same as the ball speed
-	set_velocity(Vector2(0,get_opponent_direction()) * speed)
+	velocity = Vector2(0,get_opponent_direction()) * speed
 	move_and_slide()
 
 func get_opponent_direction():

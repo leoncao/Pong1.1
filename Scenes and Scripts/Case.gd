@@ -2,10 +2,10 @@ extends VBoxContainer
 var case_opening = preload("res://Scenes and Scripts/CaseSystem.tscn")
 # Add this line at the top of your script to define the signal
 signal item_unlocked(shape, texture)
-@export var blue_items # (Array, Texture2D)
-@export var purple_items # (Array, Texture2D)
-@export var red_items # (Array, Texture2D)
-@export var special_items # (Array, Texture2D)
+@export var blue_items: Array[Texture2D] = []
+@export var purple_items: Array[Texture2D] = []
+@export var red_items: Array[Texture2D] = []
+@export var special_items: Array[Texture2D] = []
 var item_list = {}
 var items = []
 

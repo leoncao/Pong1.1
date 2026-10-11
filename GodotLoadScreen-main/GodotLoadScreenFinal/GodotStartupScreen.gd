@@ -2,16 +2,16 @@ extends ColorRect
 
 
 @onready var godotSprite = $Control/GodotAnimatedSprite
-@onready var tween = $Tween
 @onready var godotTXT = $Control/Godot
 @onready var lightFlikceringSound = $LightFlickerSound
 
 
 func _ready():
 	
-	tween.interpolate_property(godotTXT, 'modulate', Color(1,1,1,0), Color(1,1,1,1),
-	 1, Tween.TRANS_BOUNCE, Tween.EASE_IN_OUT)
-	tween.start()
+	godotTXT.modulate = Color(1,1,1,0)
+	var tween = create_tween()
+	tween.tween_property(godotTXT, 'modulate', Color(1,1,1,1), 1)\
+		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_IN_OUT)
 	
 
 func _on_AnimationPlayTimer_timeout():

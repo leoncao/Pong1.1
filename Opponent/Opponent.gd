@@ -7,11 +7,12 @@ var new_sprite = preload("res://assets/Paddle/final_evil_boss.png")
 var frame_count = 0
 
 func _ready():
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING  # 和 Godot 3 一样：没有"地板"概念
 	randomize()
 	ball = get_parent().find_child("Ball")
 	
 func _physics_process(delta):
-	set_velocity(Vector2(0,get_opponent_direction()) * speed)
+	velocity = Vector2(0,get_opponent_direction()) * speed
 	move_and_slide()
 	
 func get_opponent_direction():
