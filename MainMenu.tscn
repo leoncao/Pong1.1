@@ -1,60 +1,115 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene format=3 uid="uid://chic83a8h4gsv"]
 
-[ext_resource path="res://assets/Orbitron/Orbitron-VariableFont_wght.ttf" type="FontFile" id=1]
-[ext_resource path="res://MainMenu.gd" type="Script" id=2]
-[ext_resource path="res://assets/UI/Theme/UI.tres" type="Theme" id=3]
-[ext_resource path="res://Scenes/ParallaxBackground.tscn" type="PackedScene" id=4]
+[ext_resource type="FontFile" uid="uid://blwv4vjc5bj0d" path="res://assets/Orbitron/Orbitron-VariableFont_wght.ttf" id="1"]
+[ext_resource type="Script" uid="uid://dpugedhtw7c4k" path="res://MainMenu.gd" id="2"]
+[ext_resource type="Theme" path="res://assets/UI/Theme/UI.tres" id="3"]
+[ext_resource type="PackedScene" path="res://Scenes/ParallaxBackground.tscn" id="4"]
 
-[sub_resource type="FontFile" id=1]
-size = 80
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="1"]
+fallbacks = Array[Font]([ExtResource("1")])
+cache/0/variation_coordinates = {}
+cache/0/face_index = 0
+cache/0/embolden = 0.0
+cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
+cache/0/spacing_top = 0
+cache/0/spacing_bottom = 0
+cache/0/spacing_space = 0
+cache/0/spacing_glyph = 0
+cache/0/baseline_offset = 0.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="FontFile" id=2]
-size = 35
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="2"]
+fallbacks = Array[Font]([ExtResource("1")])
+cache/0/variation_coordinates = {}
+cache/0/face_index = 0
+cache/0/embolden = 0.0
+cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
+cache/0/spacing_top = 0
+cache/0/spacing_bottom = 0
+cache/0/spacing_space = 0
+cache/0/spacing_glyph = 0
+cache/0/baseline_offset = 0.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="FontFile" id=3]
-size = 20
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="3"]
+fallbacks = Array[Font]([ExtResource("1")])
+cache/0/variation_coordinates = {}
+cache/0/face_index = 0
+cache/0/embolden = 0.0
+cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
+cache/0/spacing_top = 0
+cache/0/spacing_bottom = 0
+cache/0/spacing_space = 0
+cache/0/spacing_glyph = 0
+cache/0/baseline_offset = 0.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="FontFile" id=4]
-size = 20
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="4"]
+fallbacks = Array[Font]([ExtResource("1")])
+cache/0/variation_coordinates = {}
+cache/0/face_index = 0
+cache/0/embolden = 0.0
+cache/0/transform = Transform2D(1, 0, 0, 1, 0, 0)
+cache/0/spacing_top = 0
+cache/0/spacing_bottom = 0
+cache/0/spacing_space = 0
+cache/0/spacing_glyph = 0
+cache/0/baseline_offset = 0.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=370006794]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-script = ExtResource( 2 )
+script = ExtResource("2")
 
-[node name="ParallaxBackground" parent="." instance=ExtResource( 4 )]
+[node name="ParallaxBackground" parent="." unique_id=1358656255 instance=ExtResource("4")]
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=869983508]
 visible = false
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.337255, 0.270588, 0.270588, 1 )
+color = Color(0.337255, 0.270588, 0.270588, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=988590536]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -13.0
 offset_bottom = -373.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
-offset_right = 1267.0
-offset_bottom = 347.0
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=200751131]
+layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
-offset_right = 1267.0
-offset_bottom = 347.0
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1744977591]
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 7
-theme_override_fonts/font = SubResource( 1 )
+theme_override_fonts/font = SubResource("1")
 text = "Project Pong"
-align = 1
-valign = 1
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="MarginContainer3" type="MarginContainer" parent="."]
+[node name="MarginContainer3" type="MarginContainer" parent="." unique_id=1703707852]
+layout_mode = 0
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 32.0
@@ -62,88 +117,65 @@ offset_top = -329.0
 offset_right = 332.0
 offset_bottom = -27.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer3"]
-offset_right = 332.0
-offset_bottom = 302.0
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer3" unique_id=980363664]
+layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer3/VBoxContainer"]
-offset_right = 332.0
-offset_bottom = 45.0
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer3/VBoxContainer" unique_id=2021831597]
+layout_mode = 2
 
-[node name="Play" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer"]
-offset_right = 332.0
-offset_bottom = 45.0
-theme = ExtResource( 3 )
-theme_override_fonts/font = SubResource( 2 )
+[node name="Play" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer" unique_id=734358372]
+layout_mode = 2
+theme = ExtResource("3")
+theme_override_fonts/font = SubResource("2")
 text = "CLASSIC"
-align = 0
 
-[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer3/VBoxContainer"]
-offset_top = 49.0
-offset_right = 332.0
-offset_bottom = 94.0
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer3/VBoxContainer" unique_id=128101939]
+layout_mode = 2
 
-[node name="crazyMode" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer2"]
-offset_right = 332.0
-offset_bottom = 45.0
-theme = ExtResource( 3 )
-theme_override_fonts/font = SubResource( 2 )
+[node name="crazyMode" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer2" unique_id=668014841]
+layout_mode = 2
+theme = ExtResource("3")
+theme_override_fonts/font = SubResource("2")
 text = "HARDCORE"
-align = 0
 
-[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer3/VBoxContainer"]
-offset_top = 98.0
-offset_right = 332.0
-offset_bottom = 143.0
+[node name="MarginContainer3" type="MarginContainer" parent="MarginContainer3/VBoxContainer" unique_id=1572015623]
+layout_mode = 2
 
-[node name="Shop" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer3"]
-offset_right = 332.0
-offset_bottom = 45.0
-theme = ExtResource( 3 )
-theme_override_fonts/font = SubResource( 2 )
+[node name="Shop" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer3" unique_id=2143211966]
+layout_mode = 2
+theme = ExtResource("3")
+theme_override_fonts/font = SubResource("2")
 text = "CUSTOMIZATION"
-align = 0
 
-[node name="MarginContainer4" type="MarginContainer" parent="MarginContainer3/VBoxContainer"]
-offset_top = 147.0
-offset_right = 332.0
-offset_bottom = 192.0
+[node name="MarginContainer4" type="MarginContainer" parent="MarginContainer3/VBoxContainer" unique_id=378551583]
+layout_mode = 2
 
-[node name="How to Play" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer4"]
-offset_right = 332.0
-offset_bottom = 45.0
-theme = ExtResource( 3 )
-theme_override_fonts/font = SubResource( 2 )
+[node name="How to Play" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer4" unique_id=325349558]
+layout_mode = 2
+theme = ExtResource("3")
+theme_override_fonts/font = SubResource("2")
 text = "HOW TO PLAY"
-align = 0
 
-[node name="MarginContainer5" type="MarginContainer" parent="MarginContainer3/VBoxContainer"]
-offset_top = 196.0
-offset_right = 332.0
-offset_bottom = 241.0
+[node name="MarginContainer5" type="MarginContainer" parent="MarginContainer3/VBoxContainer" unique_id=1718862836]
+layout_mode = 2
 
-[node name="Credit" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer5"]
-offset_right = 332.0
-offset_bottom = 45.0
-theme = ExtResource( 3 )
-theme_override_fonts/font = SubResource( 2 )
+[node name="Credit" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer5" unique_id=1108488346]
+layout_mode = 2
+theme = ExtResource("3")
+theme_override_fonts/font = SubResource("2")
 text = "CREDIT"
-align = 0
 
-[node name="MarginContainer6" type="MarginContainer" parent="MarginContainer3/VBoxContainer"]
-offset_top = 245.0
-offset_right = 332.0
-offset_bottom = 290.0
+[node name="MarginContainer6" type="MarginContainer" parent="MarginContainer3/VBoxContainer" unique_id=1766617037]
+layout_mode = 2
 
-[node name="Quit" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer6"]
-offset_right = 332.0
-offset_bottom = 45.0
-theme = ExtResource( 3 )
-theme_override_fonts/font = SubResource( 2 )
+[node name="Quit" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer6" unique_id=2098214240]
+layout_mode = 2
+theme = ExtResource("3")
+theme_override_fonts/font = SubResource("2")
 text = "QUIT"
-align = 0
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1422262424]
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -152,11 +184,12 @@ offset_left = -113.0
 offset_top = -28.0
 offset_right = 46.0
 offset_bottom = 17.0
-theme_override_fonts/font = SubResource( 3 )
-text = "v1.1.2(WIP)"
+theme_override_fonts/font = SubResource("3")
+text = "v2.0(WIP)"
 
-[node name="PatchNote" type="Button" parent="."]
+[node name="PatchNote" type="Button" parent="." unique_id=1788680500]
 visible = false
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
@@ -165,8 +198,8 @@ offset_left = -156.0
 offset_top = -56.0
 offset_right = -6.0
 offset_bottom = -30.0
-theme = ExtResource( 3 )
-theme_override_fonts/font = SubResource( 4 )
+theme = ExtResource("3")
+theme_override_fonts/font = SubResource("4")
 text = "PATCH NOTE"
 
 [connection signal="pressed" from="MarginContainer3/VBoxContainer/MarginContainer/Play" to="." method="_on_Play_pressed"]
