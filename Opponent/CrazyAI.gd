@@ -4,6 +4,7 @@ var ball
 var speed = 300  # Define the speed variable
 var colors = Color.MAROON
 var frame_count = 0
+var speed_mult := 1.0   # 减速道具会把它变成 0.5
 func _ready():
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING  # 和 Godot 3 一样：没有"地板"概念
 	randomize()
@@ -11,7 +12,7 @@ func _ready():
 
 func _physics_process(delta):
 	speed = ball.speed # Set the AI speed to be the same as the ball speed
-	velocity = Vector2(0,get_opponent_direction()) * speed
+	velocity = Vector2(0,get_opponent_direction()) * speed * speed_mult
 	move_and_slide()
 
 func get_opponent_direction():

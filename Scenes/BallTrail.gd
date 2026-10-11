@@ -8,6 +8,7 @@ func _ready():
 	var g = Loot.equipped_trail_gradient()
 	if g:
 		gradient = g
+		visible = true   # 装备了拖尾就显示出来（经典模式原来默认隐藏拖尾）
 
 func _process(_delta):
 	global_position = Vector2(0,0)

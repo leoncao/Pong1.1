@@ -11,9 +11,13 @@ var achievements = {
 	# Add more achievements...
 }
 
+func _ready():
+	load_achievements()   # 开游戏时读取已解锁的成就
+
 func unlock(achievement_id):
 	if achievements.has(achievement_id) and not achievements[achievement_id]["unlocked"]:
 		achievements[achievement_id]["unlocked"] = true
+		save_achievements()   # 一解锁就存档，下次打开游戏还在
 		# Show the achievement notification
 		# Godot 4 修复：原来的 get_node("") 拿到的是没有 text 属性的节点，会报错，
 		# 所以提示从来没显示出来。这里改为用一个简单的 Label 显示提示文字。
@@ -21,7 +25,9 @@ func unlock(achievement_id):
 		achievement_notification.layer = 100
 		var label = Label.new()
 		label.text = "Achievement Unlocked: " + achievements[achievement_id]["name"]
-		label.position = Vector2(20, 20)
+		achievement_notification.add_to_group("AchievementPopup")
+		var stacked = get_tree().get_nodes_in_group("AchievementPopup").size()
+		label.position = Vector2(20, 20 + 30 * stacked)   # 同时解锁多个成就时往下排，不会叠在一起
 		achievement_notification.add_child(label)
 		get_tree().root.add_child(achievement_notification)
 		# Set a timer to hide the achievement notification after a few seconds

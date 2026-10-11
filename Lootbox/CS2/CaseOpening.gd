@@ -1,6 +1,8 @@
 # CaseOpening.gd —— CS2 风格开箱界面：横向滚动的物品带，慢慢减速，停在中间黄线下的就是你抽到的。
 extends Control
 
+const GameFont = preload("res://Mechanics/GameFont.gd")   # 带中文的字体（网页版也能显示中文）
+
 const CARD_W := 150.0
 const CARD_GAP := 10.0
 const STRIDE := CARD_W + CARD_GAP     # 每张卡片占的宽度
@@ -32,7 +34,9 @@ func _ready():
 # ---------- 界面搭建（用代码生成，方便初学者一处看完） ----------
 func _build_ui():
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	theme = load("res://assets/UI/Theme/UI.tres")   # 用游戏原有的按钮样式
+	var th: Theme = load("res://assets/UI/Theme/UI.tres").duplicate()   # 用游戏原有的按钮样式
+	th.default_font = GameFont.get_font()
+	theme = th
 	var bg := ColorRect.new(); bg.color = Color("15161c"); bg.set_anchors_preset(Control.PRESET_FULL_RECT); add_child(bg)
 
 	var title := _label(Loot.CASES[case_id]["name"].to_upper(), 40, Color.WHITE)
@@ -70,6 +74,7 @@ func _build_ui():
 
 func _label(text: String, font_size: int, color: Color) -> Label:
 	var l := Label.new(); l.text = text
+	l.add_theme_font_override("font", GameFont.get_font())
 	l.add_theme_font_size_override("font_size", font_size)
 	l.add_theme_color_override("font_color", color)
 	return l

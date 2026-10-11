@@ -5,6 +5,7 @@ var ball
 var colors = [Color.WHITE, Color.LIME, Color.YELLOW, Color.OLIVE, Color.RED, Color.WHITE] # Array of colors for each difficulty level
 var new_sprite = preload("res://assets/Paddle/final_evil_boss.png")
 var frame_count = 0
+var speed_mult := 1.0   # 减速道具会把它变成 0.5
 
 func _ready():
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING  # 和 Godot 3 一样：没有"地板"概念
@@ -12,7 +13,7 @@ func _ready():
 	ball = get_parent().find_child("Ball")
 	
 func _physics_process(delta):
-	velocity = Vector2(0,get_opponent_direction()) * speed
+	velocity = Vector2(0,get_opponent_direction()) * speed * speed_mult
 	move_and_slide()
 	
 func get_opponent_direction():

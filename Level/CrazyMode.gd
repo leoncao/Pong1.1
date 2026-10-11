@@ -7,6 +7,16 @@ var startTime = 0
 var highestScore = 0  # This will keep track of the coins earned in the current game session
 var currentSessionCoins = 0
 var save_file = ConfigFile.new()
+const Mechanics = preload("res://Mechanics/Mechanics.gd")
+var mech            # 新玩法总控
+var combo := 0      # 连续接球次数
+var alive_time := 0.0   # 本局存活时间(只算球在动的时间)
+var _second_acc := 0.0
+
+# 连击倍率：每连续接 5 次球 +0.5 倍，最多 3 倍（金币 = 每秒 0.5 × 倍率）
+func coin_multiplier() -> float:
+	return minf(3.0, 1.0 + 0.5 * floor(combo / 5.0))
+
 func _ready():
 	$CountdownTimer.start()
 	get_tree().call_group("BallGroup", "stop_ball")
@@ -29,9 +39,20 @@ func _ready():
 		#print("Sprite node before: ", $Player/Sprite.texture)  # Print the Sprite node's texture before the assignment
 		$Player/Sprite2D.texture = texture
 		#print("Sprite node after: ", $Player/Sprite.texture)  # Print the Sprite node's texture after the assignment
-	
-		
+	_setup_mechanics()
+
+func _setup_mechanics():
+	mech = Mechanics.new()
+	mech.name = "Mechanics"
+	add_child(mech)
+	mech.setup(self, "crazy", $CrazyBall, $Player, $CrazyAI)
+	$Player.ball_hit.connect(func(_b): combo += 1)
+
 func _on_LeftWall_body_entered(body):
+	var kind = mech.classify(body)
+	if kind == "other": return
+	if kind == "decoy" or kind == "extra":   # 额外的球/假球漏了不算输
+		mech.remove_ball(body); return
 	$CrazyBall.position = Vector2(640,320)
 	lastScored = "AI" 
 	stop_game() 
@@ -40,6 +61,12 @@ func _on_LeftWall_body_entered(body):
 	$mainmenubutton.visible = true  
 
 func _on_RightWall_body_entered(body):
+	var kind = mech.classify(body)
+	if kind == "other": return
+	if kind == "decoy":
+		mech.remove_ball(body); return
+	if kind == "extra":   # 额外的球打进对方球门：奖励 +3 分、+1 金币
+		mech.remove_ball(body); currentScore += 3; currentSessionCoins += 1.0; $ScoreSound.play(); return
 	$CrazyBall.position = Vector2(640,320)
 	lastScored = "Player" 
 	stop_game()
@@ -51,10 +78,15 @@ func _on_RightWall_body_entered(body):
 func _process(delta):
 	$CountdownLabel.text = str(int($CountdownTimer.time_left) + 1)
 	if crazyMode and not get_tree().paused:
-		if Time.get_ticks_msec() - startTime >= 1000:  # If a second has passed
-			currentScore += 1  # Increase the current score
-			currentSessionCoins += 0.5  # Increase the coins earned in the current game session
-			startTime = Time.get_ticks_msec()  # Reset the start time
+		# 改进：只在球真的在动时计时（倒计时期间不算分），金币乘以连击倍率
+		if $CrazyBall.speed > 0:
+			alive_time += delta
+			_second_acc += delta
+			if _second_acc >= 1.0:  # If a second has passed
+				_second_acc -= 1.0
+				currentScore += 1  # Increase the current score
+				currentSessionCoins += 0.5 * coin_multiplier()  # Increase the coins earned in the current game session
+		mech.hud.set_crazy(alive_time, currentScore, highestScore, currentSessionCoins, combo, coin_multiplier())
 		$CurrentScoreLabel.text = "Current Score: " + str(currentScore)
 		$HighestScoreLabel.text = "Highest Score: " + str(highestScore)  # Display the highest score
 		$TotalCoinsLabel.text = "Total Coins: " + str(Global.coins)  # Update the total coins earned across all game sessions
@@ -64,6 +96,7 @@ func _on_CountdownTimer_timeout():
 	$CountdownLabel.visible = false
 
 func stop_game():
+	mech.stop_all()
 	get_tree().call_group("BallGroup", "stop_ball") 
 	$CrazyAI.speed = 0 
 	get_tree().paused = true  # Pause the game

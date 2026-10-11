@@ -12,6 +12,8 @@ var bossdefeat = load("res://assets/Sounds/boss_defeat.mp3")  # Load the "Defeat
 var bossSound = load("res://assets/Sounds/boss_sound.wav")  # Load the "Boss" sound
 var popup = Label.new()  # Create a new Label node for the popup text
 var tween: Tween  # Godot 4: Tween 用 create_tween() 现做现用
+const Mechanics = preload("res://Mechanics/Mechanics.gd")
+var mech   # 新玩法总控（道具、BOSS 技能、障碍、HUD）
 
 func _ready():
 	$CountdownTimer.start()
@@ -35,11 +37,21 @@ func _ready():
 	popup.vertical_alignment = VERTICAL_ALIGNMENT_CENTER  # Vertically align the text to the center
 	popup.position = get_viewport().get_visible_rect().size / 2 - popup.custom_minimum_size / 2 # Position the popup in the center of the screen
 	popup.hide()  # Hide the popup initially
+	mech = Mechanics.new()
+	mech.name = "Mechanics"
+	add_child(mech)
+	mech.setup(self, "classic", $Ball, $Player, $Opponent)
 	
 func _on_LeftWall_body_entered(body):
 	#$Ball.position = Vector2(640,320)
+	var kind = mech.classify(body)
+	if kind == "other": return   # 不是球（比如球拍）就忽略
+	if kind == "decoy":   # BOSS 的假球不算分
+		mech.remove_ball(body); return
 	OpponentScore += 1
 	lastScored = "AI" 
+	if kind == "extra":   # 多球道具的额外球：算分，但不重新发球
+		mech.remove_ball(body); $ScoreSound.play(); check_progress(); return
 	score_achieved()
 	shake_camera(1,0.3)
 	if OpponentScore == 1 and PlayerScore == 0:
@@ -47,8 +59,16 @@ func _on_LeftWall_body_entered(body):
 
 func _on_RightWall_body_entered(body):
 	#$Ball.position = Vector2(640,320)
+	var kind = mech.classify(body)
+	if kind == "other": return
+	if kind == "decoy":
+		mech.remove_ball(body); return
 	PlayerScore += 1
 	lastScored = "Player" 
+	if kind == "extra":
+		mech.remove_ball(body); $ScoreSound.play(); check_progress()
+		if PlayerScore == 10: Achievements.unlock("score_10_points")
+		return
 	score_achieved()
 	shake_camera(1,0.2)
 	if PlayerScore == 10:
@@ -58,6 +78,7 @@ func _process(delta):
 	$PlayerScore.text = str(PlayerScore)
 	$OpponentScore.text = str(OpponentScore)
 	$CountdownLabel.text = str(int($CountdownTimer.time_left) + 1)
+	mech.hud.set_classic(PlayerScore, OpponentScore, difficultyLevel)
 	if PlayerScore > OpponentScore and PlayerScore >= 1 and not Achievements.achievements["first_win"]["unlocked"]:
 		Achievements.unlock("first_win")
 		
@@ -73,12 +94,17 @@ func score_achieved():
 	$ScoreSound.play()
 	$Player.position.x = 35
 	$Opponent.position.x = 1280 - 35
-	
+	mech.clear_extra_balls()   # 主球得分后，额外的球和假球都清掉
+	check_progress()
+
+# 检查升级 / BOSS / 胜负（原来写在 score_achieved 里，拆出来给多球也能用）
+func check_progress():
 	if PlayerScore in [5, 10, 15, 20, 25, 29] and lastScored == "Player": 
 		difficultyLevel += 1
 		print("Difficulty level increased to " + str(difficultyLevel)) 
 		$Opponent.increase_difficulty(difficultyLevel) 
 		$levelUpSound.play() # Play the level up sound
+		mech.on_level_up(difficultyLevel)   # 每升一级加一个障碍
 		if difficultyLevel >= 3: 
 			get_tree().call_group("BallGroup", "increase_speed")
 		# Show the level up popup
@@ -100,13 +126,14 @@ func score_achieved():
 	
 	if PlayerScore == 25: 
 		$Opponent.speed += 50
-	if PlayerScore == 29:
+	if PlayerScore == 29 and not mech.boss_active:   # 改进：BOSS 只登场一次（原来对手每得 1 分都会重复登场、速度无限叠加）
 		$PlayerScore.hide()  # Hide the player score label
 		$OpponentScore.hide()  # Hide the opponent score label
 #		get_tree().root.get_node("CanvasLayer").modulate = Color(1, 0, 0)  # Change the screen background to red
 		$bossSound.play()  # Play the "Boss" sound
 		shake_camera(5,0.5)
 		$Opponent.speed += 100  # Increase the AI paddle speed
+		mech.start_boss()   # BOSS 技能：假球 + 黑暗
 		#$Opponent.scale *= 1  # Increase the AI paddle size
 		#$Opponent/CollisionPolygon2D.scale *= 0.2  # Increase the AI paddle collision shape
 	if PlayerScore == 30:
@@ -127,6 +154,7 @@ func shake_camera(intensity, duration):
 	$Camera2D.offset = Vector2.ZERO
 
 func game_over():
+	mech.stop_all()
 	get_tree().call_group("BallGroup", "stop_ball") 
 	$Opponent.speed = 0 
 	$CountdownTimer.stop()
@@ -138,6 +166,7 @@ func game_over():
 	$ParallaxBackground.show()
 	
 func stop_game():
+	mech.stop_all()
 	get_tree().call_group("BallGroup", "stop_ball") 
 	$Opponent.speed = 0 
 	$CountdownTimer.stop()
