@@ -1,4 +1,4 @@
-extends Tween
+extends Node  # Godot 4: Tween 不再是节点，这个(未使用的)空脚本改为继承 Node
 
 
 # Declare member variables here. Examples:

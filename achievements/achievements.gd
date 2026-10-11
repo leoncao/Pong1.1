@@ -15,11 +15,17 @@ func unlock(achievement_id):
 	if achievements.has(achievement_id) and not achievements[achievement_id]["unlocked"]:
 		achievements[achievement_id]["unlocked"] = true
 		# Show the achievement notification
-		var achievement_notification = achievement_notification_scene.instance()
-		achievement_notification.get_node("").text = "Achievement Unlocked: " + achievements[achievement_id]["name"]
+		# Godot 4 修复：原来的 get_node("") 拿到的是没有 text 属性的节点，会报错，
+		# 所以提示从来没显示出来。这里改为用一个简单的 Label 显示提示文字。
+		var achievement_notification = CanvasLayer.new()
+		achievement_notification.layer = 100
+		var label = Label.new()
+		label.text = "Achievement Unlocked: " + achievements[achievement_id]["name"]
+		label.position = Vector2(20, 20)
+		achievement_notification.add_child(label)
 		get_tree().root.add_child(achievement_notification)
 		# Set a timer to hide the achievement notification after a few seconds
-		yield(get_tree().create_timer(3.0), "timeout")
+		await get_tree().create_timer(3.0).timeout
 		achievement_notification.queue_free()
 
 func save_achievements():

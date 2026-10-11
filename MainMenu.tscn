@@ -1,23 +1,23 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://assets/Orbitron/Orbitron-VariableFont_wght.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/Orbitron/Orbitron-VariableFont_wght.ttf" type="FontFile" id=1]
 [ext_resource path="res://MainMenu.gd" type="Script" id=2]
 [ext_resource path="res://assets/UI/Theme/UI.tres" type="Theme" id=3]
 [ext_resource path="res://Scenes/ParallaxBackground.tscn" type="PackedScene" id=4]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="FontFile" id=1]
 size = 80
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="FontFile" id=2]
 size = 35
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="FontFile" id=3]
 size = 20
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="FontFile" id=4]
 size = 20
 font_data = ExtResource( 1 )
 
@@ -37,19 +37,19 @@ color = Color( 0.337255, 0.270588, 0.270588, 1 )
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -13.0
-margin_bottom = -373.0
+offset_right = -13.0
+offset_bottom = -373.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
-margin_right = 1267.0
-margin_bottom = 347.0
+offset_right = 1267.0
+offset_bottom = 347.0
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
-margin_right = 1267.0
-margin_bottom = 347.0
+offset_right = 1267.0
+offset_bottom = 347.0
 size_flags_horizontal = 3
 size_flags_vertical = 7
-custom_fonts/font = SubResource( 1 )
+theme_override_fonts/font = SubResource( 1 )
 text = "Project Pong"
 align = 1
 valign = 1
@@ -57,89 +57,89 @@ valign = 1
 [node name="MarginContainer3" type="MarginContainer" parent="."]
 anchor_top = 1.0
 anchor_bottom = 1.0
-margin_left = 32.0
-margin_top = -329.0
-margin_right = 332.0
-margin_bottom = -27.0
+offset_left = 32.0
+offset_top = -329.0
+offset_right = 332.0
+offset_bottom = -27.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer3"]
-margin_right = 332.0
-margin_bottom = 302.0
+offset_right = 332.0
+offset_bottom = 302.0
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer3/VBoxContainer"]
-margin_right = 332.0
-margin_bottom = 45.0
+offset_right = 332.0
+offset_bottom = 45.0
 
 [node name="Play" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer"]
-margin_right = 332.0
-margin_bottom = 45.0
+offset_right = 332.0
+offset_bottom = 45.0
 theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 2 )
+theme_override_fonts/font = SubResource( 2 )
 text = "CLASSIC"
 align = 0
 
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer3/VBoxContainer"]
-margin_top = 49.0
-margin_right = 332.0
-margin_bottom = 94.0
+offset_top = 49.0
+offset_right = 332.0
+offset_bottom = 94.0
 
 [node name="crazyMode" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer2"]
-margin_right = 332.0
-margin_bottom = 45.0
+offset_right = 332.0
+offset_bottom = 45.0
 theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 2 )
+theme_override_fonts/font = SubResource( 2 )
 text = "HARDCORE"
 align = 0
 
 [node name="MarginContainer3" type="MarginContainer" parent="MarginContainer3/VBoxContainer"]
-margin_top = 98.0
-margin_right = 332.0
-margin_bottom = 143.0
+offset_top = 98.0
+offset_right = 332.0
+offset_bottom = 143.0
 
 [node name="Shop" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer3"]
-margin_right = 332.0
-margin_bottom = 45.0
+offset_right = 332.0
+offset_bottom = 45.0
 theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 2 )
+theme_override_fonts/font = SubResource( 2 )
 text = "CUSTOMIZATION"
 align = 0
 
 [node name="MarginContainer4" type="MarginContainer" parent="MarginContainer3/VBoxContainer"]
-margin_top = 147.0
-margin_right = 332.0
-margin_bottom = 192.0
+offset_top = 147.0
+offset_right = 332.0
+offset_bottom = 192.0
 
 [node name="How to Play" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer4"]
-margin_right = 332.0
-margin_bottom = 45.0
+offset_right = 332.0
+offset_bottom = 45.0
 theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 2 )
+theme_override_fonts/font = SubResource( 2 )
 text = "HOW TO PLAY"
 align = 0
 
 [node name="MarginContainer5" type="MarginContainer" parent="MarginContainer3/VBoxContainer"]
-margin_top = 196.0
-margin_right = 332.0
-margin_bottom = 241.0
+offset_top = 196.0
+offset_right = 332.0
+offset_bottom = 241.0
 
 [node name="Credit" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer5"]
-margin_right = 332.0
-margin_bottom = 45.0
+offset_right = 332.0
+offset_bottom = 45.0
 theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 2 )
+theme_override_fonts/font = SubResource( 2 )
 text = "CREDIT"
 align = 0
 
 [node name="MarginContainer6" type="MarginContainer" parent="MarginContainer3/VBoxContainer"]
-margin_top = 245.0
-margin_right = 332.0
-margin_bottom = 290.0
+offset_top = 245.0
+offset_right = 332.0
+offset_bottom = 290.0
 
 [node name="Quit" type="Button" parent="MarginContainer3/VBoxContainer/MarginContainer6"]
-margin_right = 332.0
-margin_bottom = 45.0
+offset_right = 332.0
+offset_bottom = 45.0
 theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 2 )
+theme_override_fonts/font = SubResource( 2 )
 text = "QUIT"
 align = 0
 
@@ -148,11 +148,11 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -113.0
-margin_top = -28.0
-margin_right = 46.0
-margin_bottom = 17.0
-custom_fonts/font = SubResource( 3 )
+offset_left = -113.0
+offset_top = -28.0
+offset_right = 46.0
+offset_bottom = 17.0
+theme_override_fonts/font = SubResource( 3 )
 text = "v1.1.2(WIP)"
 
 [node name="PatchNote" type="Button" parent="."]
@@ -161,12 +161,12 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -156.0
-margin_top = -56.0
-margin_right = -6.0
-margin_bottom = -30.0
+offset_left = -156.0
+offset_top = -56.0
+offset_right = -6.0
+offset_bottom = -30.0
 theme = ExtResource( 3 )
-custom_fonts/font = SubResource( 4 )
+theme_override_fonts/font = SubResource( 4 )
 text = "PATCH NOTE"
 
 [connection signal="pressed" from="MarginContainer3/VBoxContainer/MarginContainer/Play" to="." method="_on_Play_pressed"]

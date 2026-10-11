@@ -1,7 +1,7 @@
-extends KinematicBody2D
+extends CharacterBody2D
 
 var speed = 600
-var velocity = Vector2.ZERO
+# velocity: Godot 4 的 CharacterBody2D 自带 velocity 属性，这里直接使用
 
 func _ready():
 	randomize()
@@ -11,7 +11,7 @@ func _ready():
 func _physics_process(delta):
 	var collision_object = move_and_collide(velocity * speed * delta)
 	if collision_object:
-		velocity = velocity.bounce(collision_object.normal)
+		velocity = velocity.bounce(collision_object.get_normal())
 		$CollisionSound.play()
 		play_squash_stretch()
 		

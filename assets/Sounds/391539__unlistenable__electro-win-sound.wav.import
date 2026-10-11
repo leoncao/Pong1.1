@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/391539__unlistenable__electro-win-sound.wav-525dcd765512ca023be3b4ad05b05f00.sample"
+type="AudioStreamWAV"
+uid="uid://cehq2364pxcq8"
+path="res://.godot/imported/391539__unlistenable__electro-win-sound.wav-525dcd765512ca023be3b4ad05b05f00.sample"
 
 [deps]
 
 source_file="res://assets/Sounds/391539__unlistenable__electro-win-sound.wav"
-dest_files=[ "res://.import/391539__unlistenable__electro-win-sound.wav-525dcd765512ca023be3b4ad05b05f00.sample" ]
+dest_files=["res://.godot/imported/391539__unlistenable__electro-win-sound.wav-525dcd765512ca023be3b4ad05b05f00.sample"]
 
 [params]
 

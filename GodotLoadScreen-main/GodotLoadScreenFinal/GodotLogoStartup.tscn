@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://GodotLoadScreen-main/GodotLoadScreenFinal/GodotLogoStartup.gd" type="Script" id=1]
-[ext_resource path="res://GodotLoadScreen-main/GodotLoadScreenFinal/Godot.png" type="Texture" id=2]
+[ext_resource path="res://GodotLoadScreen-main/GodotLoadScreenFinal/Godot.png" type="Texture2D" id=2]
 [ext_resource path="res://GodotLoadScreen-main/GodotLoadScreenFinal/GodotLogoParticles.tres" type="Material" id=3]
 
 [sub_resource type="AtlasTexture" id=5]
@@ -24,12 +24,12 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[node name="GodotAnimatedSprite" type="AnimatedSprite"]
+[node name="GodotAnimatedSprite" type="AnimatedSprite2D"]
 modulate = Color( 1.1, 1.1, 1.3, 1 )
 frames = SubResource( 4 )
 script = ExtResource( 1 )
 
-[node name="Particles2D" type="Particles2D" parent="."]
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 show_behind_parent = true
 emitting = false
 amount = 16

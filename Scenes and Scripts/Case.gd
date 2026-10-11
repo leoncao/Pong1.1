@@ -2,10 +2,10 @@ extends VBoxContainer
 var case_opening = preload("res://Scenes and Scripts/CaseSystem.tscn")
 # Add this line at the top of your script to define the signal
 signal item_unlocked(shape, texture)
-export (Array, Texture) var blue_items
-export (Array, Texture) var purple_items
-export (Array, Texture) var red_items
-export (Array, Texture) var special_items
+@export var blue_items: Array[Texture2D] = []
+@export var purple_items: Array[Texture2D] = []
+@export var red_items: Array[Texture2D] = []
+@export var special_items: Array[Texture2D] = []
 var item_list = {}
 var items = []
 
@@ -23,10 +23,10 @@ func _on_Button_pressed():
 	if Global.coins >= 0:  # Check if the player has enough coins
 		Global.coins -= 0  # Deduct the cost of opening the box
 		Global.save_coins()  # Save the updated coin count
-		var opening_scene = case_opening.instance()
+		var opening_scene = case_opening.instantiate()
 		opening_scene.item_list = item_list
 		opening_scene.items = items
-		opening_scene.connect("item_selected", self, "_on_item_selected")
+		opening_scene.connect("item_selected", Callable(self, "_on_item_selected"))
 		get_tree().get_root().add_child(opening_scene)
 	else:
 		print("Not enough coins to open the box.")

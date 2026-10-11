@@ -4,56 +4,56 @@
 [ext_resource path="res://Opponent/CrazyAI.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scenes/PauseMenu.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Level/HighScoreWindow.gd" type="Script" id=4]
-[ext_resource path="res://assets/PoetsenOne-Regular.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://assets/PoetsenOne-Regular.ttf" type="FontFile" id=5]
 [ext_resource path="res://assets/levelup.wav" type="AudioStream" id=6]
 [ext_resource path="res://assets/ping_pong_8bit_plop.ogg" type="AudioStream" id=7]
 [ext_resource path="res://Level/CrazyMode.gd" type="Script" id=8]
 [ext_resource path="res://Ball/CrazyBall.tscn" type="PackedScene" id=9]
-[ext_resource path="res://assets/Orbitron/Orbitron-VariableFont_wght.ttf" type="DynamicFontData" id=10]
+[ext_resource path="res://assets/Orbitron/Orbitron-VariableFont_wght.ttf" type="FontFile" id=10]
 [ext_resource path="res://Scenes/BallTrail.tscn" type="PackedScene" id=11]
 [ext_resource path="res://Scenes/ParallaxBackground.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/UI/Theme/UI.tres" type="Theme" id=13]
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="FontFile" id=3]
 size = 40
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="FontFile" id=4]
 size = 40
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="FontFile" id=5]
 size = 50
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFontData" id=13]
+[sub_resource type="FontFile" id=13]
 font_path = "res://assets/Anta-Regular.ttf"
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="FontFile" id=6]
 size = 55
 font_data = SubResource( 13 )
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="FontFile" id=8]
 size = 25
 font_data = ExtResource( 10 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="FontFile" id=9]
 size = 20
 font_data = ExtResource( 10 )
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="FontFile" id=10]
 size = 25
 font_data = ExtResource( 10 )
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="FontFile" id=12]
 size = 25
 font_data = ExtResource( 10 )
 
-[sub_resource type="DynamicFont" id=7]
+[sub_resource type="FontFile" id=7]
 size = 55
 font_data = SubResource( 13 )
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="FontFile" id=11]
 font_data = SubResource( 13 )
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -77,9 +77,9 @@ color = Color( 0.0784314, 0.129412, 0.14902, 1 )
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -200.0
-custom_colors/font_color = Color( 0.85098, 0.847059, 0.843137, 1 )
-custom_fonts/font = SubResource( 3 )
+offset_left = -200.0
+theme_override_colors/font_color = Color( 0.85098, 0.847059, 0.843137, 1 )
+theme_override_fonts/font = SubResource( 3 )
 text = "Text"
 align = 1
 valign = 1
@@ -88,9 +88,9 @@ valign = 1
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 200.0
-custom_colors/font_color = Color( 0.85098, 0.847059, 0.843137, 1 )
-custom_fonts/font = SubResource( 4 )
+offset_left = 200.0
+theme_override_colors/font_color = Color( 0.85098, 0.847059, 0.843137, 1 )
+theme_override_fonts/font = SubResource( 4 )
 text = "Text"
 align = 1
 valign = 1
@@ -99,9 +99,9 @@ valign = 1
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -400.0
-custom_colors/font_color = Color( 0.901961, 0.584314, 0.505882, 1 )
-custom_fonts/font = SubResource( 5 )
+offset_top = -400.0
+theme_override_colors/font_color = Color( 0.901961, 0.584314, 0.505882, 1 )
+theme_override_fonts/font = SubResource( 5 )
 text = "Ready"
 align = 1
 valign = 1
@@ -111,7 +111,7 @@ visible = false
 anchor_top = -0.268
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 6 )
+theme_override_fonts/font = SubResource( 6 )
 text = "Game Over"
 align = 1
 valign = 1
@@ -119,49 +119,49 @@ valign = 1
 [node name="ModeLabel" type="Label" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 8 )
+theme_override_fonts/font = SubResource( 8 )
 text = "Mode: Normal"
 align = 1
 
 [node name="ScoreSummary" type="Label" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 500.0
-custom_fonts/font = SubResource( 9 )
+offset_left = 500.0
+theme_override_fonts/font = SubResource( 9 )
 align = 1
 
 [node name="CurrentScoreLabel" type="Label" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -500.0
-custom_fonts/font = SubResource( 9 )
+offset_left = -500.0
+theme_override_fonts/font = SubResource( 9 )
 align = 1
 
 [node name="HighestScoreLabel" type="Label" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 1000.0
-custom_fonts/font = SubResource( 9 )
+offset_left = 1000.0
+theme_override_fonts/font = SubResource( 9 )
 text = "test"
 align = 1
 
 [node name="CurrentSessionCoinsLabel" type="Label" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 9 )
+theme_override_fonts/font = SubResource( 9 )
 valign = 2
 
 [node name="TotalCoinsLabel" type="Label" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 9 )
+theme_override_fonts/font = SubResource( 9 )
 valign = 2
 
 [node name="LongestTime" type="Label" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 300.0
-custom_fonts/font = SubResource( 10 )
+offset_right = 300.0
+theme_override_fonts/font = SubResource( 10 )
 align = 1
 valign = 1
 
@@ -174,9 +174,9 @@ script = ExtResource( 4 )
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -74.0
-margin_right = 295.0
-custom_fonts/font = SubResource( 12 )
+offset_top = -74.0
+offset_right = 295.0
+theme_override_fonts/font = SubResource( 12 )
 text = "test"
 align = 1
 valign = 1
@@ -185,36 +185,36 @@ valign = 1
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = -207.0
-custom_fonts/font = SubResource( 7 )
+offset_top = -207.0
+theme_override_fonts/font = SubResource( 7 )
 text = "You Win!"
 align = 1
 valign = 1
 
 [node name="Restart" type="Button" parent="."]
-pause_mode = 2
+process_mode = 3
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 568.0
-margin_top = 425.0
-margin_right = -557.0
-margin_bottom = -229.0
+offset_left = 568.0
+offset_top = 425.0
+offset_right = -557.0
+offset_bottom = -229.0
 theme = ExtResource( 13 )
-custom_fonts/font = SubResource( 11 )
+theme_override_fonts/font = SubResource( 11 )
 text = "RESTART"
 
 [node name="mainmenubutton" type="Button" parent="."]
-pause_mode = 2
+process_mode = 3
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 568.0
-margin_top = 492.0
-margin_right = -557.0
-margin_bottom = -162.0
+offset_left = 568.0
+offset_top = 492.0
+offset_right = -557.0
+offset_bottom = -162.0
 theme = ExtResource( 13 )
-custom_fonts/font = SubResource( 11 )
+theme_override_fonts/font = SubResource( 11 )
 text = "MAIN MENU"
 
 [node name="PauseMenu" parent="." instance=ExtResource( 3 )]

@@ -11,11 +11,11 @@ func _on_ResumeButton_pressed():
 
 func _on_MainMenuButton_pressed():
 	get_tree().paused = false
-	get_tree().change_scene("res://MainMenu.tscn")
+	get_tree().change_scene_to_file("res://MainMenu.tscn")
 
 func _on_QuitButton_pressed():
 	get_tree().quit()
 
 
 func _on_Credit_pressed():
-	get_tree().change_scene("res://assets/godot-credits-master/GodotCredits.tscn")
+	get_tree().change_scene_to_file("res://godot-credits-master/GodotCredits.tscn")

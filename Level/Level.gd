@@ -1,17 +1,17 @@
 extends Node
 #onready var pauseMenu = preload("res://Scenes/PauseMenu.tscn").instance()
-onready var blur = $Blur
+@onready var blur = $Blur
 var blur_amount = 0
-export var PlayerScore = 28
-export var OpponentScore = 0
-export var difficultyLevel = 5
+@export var PlayerScore = 28
+@export var OpponentScore = 0
+@export var difficultyLevel = 5
 var lastScored = "" 
 var save_file = ConfigFile.new()
 var bossdefeat = load("res://assets/Sounds/boss_defeat.mp3")  # Load the "Defeated" sound
 #bossdefeat.loop = false  # Stop the sound from looping
 var bossSound = load("res://assets/Sounds/boss_sound.wav")  # Load the "Boss" sound
 var popup = Label.new()  # Create a new Label node for the popup text
-var tween = Tween.new()  # Create a new Tween node for the animation
+var tween: Tween  # Godot 4: Tween 用 create_tween() 现做现用
 
 func _ready():
 	$CountdownTimer.start()
@@ -25,16 +25,15 @@ func _ready():
 	if error == OK:
 		var texture_path = save_file.get_value("selection", "texture")
 		var texture = load(texture_path)
-		$Player/Sprite.texture = texture
+		$Player/Sprite2D.texture = texture
 	# Add the popup and tween nodes to the scene
 	add_child(popup)
-	add_child(tween)
 	popup.text = "You reached Level 1"
-	popup.rect_min_size = Vector2(200, 50)  # Set the size of the popup
+	popup.custom_minimum_size = Vector2(200, 50)  # Set the size of the popup
 	#popup.rect_centered = true  # Center the popup
-	popup.align = Label.ALIGN_CENTER  # Align the text to the center
-	popup.valign = Label.VALIGN_CENTER  # Vertically align the text to the center
-	popup.rect_position = get_viewport().size / 2 - popup.rect_min_size / 2 # Position the popup in the center of the screen
+	popup.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER  # Align the text to the center
+	popup.vertical_alignment = VERTICAL_ALIGNMENT_CENTER  # Vertically align the text to the center
+	popup.position = get_viewport().get_visible_rect().size / 2 - popup.custom_minimum_size / 2 # Position the popup in the center of the screen
 	popup.hide()  # Hide the popup initially
 	
 func _on_LeftWall_body_entered(body):
@@ -90,12 +89,13 @@ func score_achieved():
 		# ... rest of your code ...		# Show the level up popup
 		
 		popup.show()  # Show the popup
-		tween.interpolate_property(popup, "modulate:a", 0, 1, 1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)  # Fade in
-		tween.start()
-		yield(get_tree().create_timer(3), "timeout")  # Wait for 3 seconds
-		tween.interpolate_property(popup, "modulate:a", 1, 0, 1, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)  # Fade out
-		tween.start()
-		yield(tween, "tween_completed")  # Wait for the animation to complete
+		popup.modulate.a = 0
+		tween = create_tween()
+		tween.tween_property(popup, "modulate:a", 1.0, 1)  # Fade in
+		await get_tree().create_timer(3).timeout  # Wait for 3 seconds
+		tween = create_tween()
+		tween.tween_property(popup, "modulate:a", 0.0, 1)  # Fade out
+		await tween.finished  # Wait for the animation to complete
 		popup.hide()  # Hide the popup
 	
 	if PlayerScore == 25: 
@@ -120,10 +120,10 @@ func score_achieved():
 func shake_camera(intensity, duration):
 	var timer = 0.0
 	while timer < duration:
-		var offset = Vector2(rand_range(-intensity, intensity), rand_range(-intensity, intensity))
+		var offset = Vector2(randf_range(-intensity, intensity), randf_range(-intensity, intensity))
 		$Camera2D.offset = offset
 		timer += get_process_delta_time()
-		yield(get_tree().create_timer(0.05), "timeout")
+		await get_tree().create_timer(0.05).timeout
 	$Camera2D.offset = Vector2.ZERO
 
 func game_over():
@@ -131,7 +131,7 @@ func game_over():
 	$Opponent.speed = 0 
 	$CountdownTimer.stop()
 	blur_amount = 15 # Set the blur amount to 5
-	blur.material.set_shader_param("blur_amount", blur_amount) # Apply the blur effect 
+	blur.material.set_shader_parameter("blur_amount", blur_amount) # Apply the blur effect 
 	$Player.speed = 0
 	$GameOver.show()  # Show the "You Win" popup
 	$Restart.show()
@@ -142,7 +142,7 @@ func stop_game():
 	$Opponent.speed = 0 
 	$CountdownTimer.stop()
 	blur_amount = 15 # Set the blur amount to 5
-	blur.material.set_shader_param("blur_amount", blur_amount) # Apply the blur effect 
+	blur.material.set_shader_parameter("blur_amount", blur_amount) # Apply the blur effect 
 	$Player.speed = 0
 	$YouWin.show()  # Show the "You Win" popup
 	$Restart.show()
@@ -169,4 +169,4 @@ func hide_pause_menu():
 	
 func _on_Restart_pressed():
 	$ParallaxBackground.set_offset(Vector2(0, 0))  # Reset the parallax background
-	get_tree().change_scene("res://Level/Level.tscn")
+	get_tree().change_scene_to_file("res://Level/Level.tscn")

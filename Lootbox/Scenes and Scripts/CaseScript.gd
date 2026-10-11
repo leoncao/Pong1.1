@@ -1,8 +1,8 @@
 extends Control
 
-onready var item_container = $"Case Scroll Container/Item Container"
-onready var case_container = $"Case Scroll Container"
-onready var panel = $Panel
+@onready var item_container = $"Case Scroll Container/Item Container"
+@onready var case_container = $"Case Scroll Container"
+@onready var panel = $Panel
 
 
 var blue_range = range(1,61)
@@ -19,7 +19,7 @@ var case_stopped = false
 
 
 func _ready():
-	case_container.get_h_scrollbar().rect_scale.x = 0
+	case_container.get_h_scroll_bar().scale.x = 0
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
 	for i in range(0,100):

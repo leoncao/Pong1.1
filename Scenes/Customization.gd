@@ -29,12 +29,12 @@ func _ready():
 
 func update_item_display():
 	var item = items[current_item_index]
-	$Sprite.texture = ResourceLoader.load(item['texture'])  # Use ResourceLoader.load() instead of load()
+	$Sprite2D.texture = ResourceLoader.load(item['texture'])  # Use ResourceLoader.load() instead of load()
 	if item['is_locked']:
-		$Sprite.modulate = Color.gray
+		$Sprite2D.modulate = Color.GRAY
 		$PriceLabel.text = "Price: " + str(item['price'])
 	else:
-		$Sprite.modulate = Color.white
+		$Sprite2D.modulate = Color.WHITE
 		$PriceLabel.text = "Unlocked"
 		
 func _on_item_unlocked(texture):
@@ -45,7 +45,8 @@ func _on_item_unlocked(texture):
 	update_item_display()  # Update the display
 	# Save the unlocked state
 	var save_file = ConfigFile.new()
-	save_file.set_value("unlocked", true)
+	save_file.load("user://unlocked.cfg")  # 原代码少写了参数(Godot 4 会直接报错)
+	save_file.set_value("unlocked", texture, true)
 	save_file.save("user://unlocked.cfg")
 #
 func _on_SelectButton_pressed():
@@ -87,10 +88,10 @@ func _on_LeftButton_pressed():
 	update_item_display()
 
 func _on_Play_pressed():
-	get_tree().change_scene("res://Level/Level.tscn")
+	get_tree().change_scene_to_file("res://Level/Level.tscn")
 
 func _on_BackButton_pressed():
-	get_tree().change_scene("res://MainMenu.tscn")
+	get_tree().change_scene_to_file("res://MainMenu.tscn")
 	
 func _exit_tree():
 	# Save the unlocked state
@@ -103,4 +104,4 @@ func _exit_tree():
 		print("Error saving file: ", error)
 
 func _on_Play2_pressed():
-	get_tree().change_scene("res://Level/CrazyMode.tscn")
+	get_tree().change_scene_to_file("res://Level/CrazyMode.tscn")

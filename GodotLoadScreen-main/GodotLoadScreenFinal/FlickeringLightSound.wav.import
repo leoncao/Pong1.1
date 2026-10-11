@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/FlickeringLightSound.wav-f6282f4938bf20609bb27cec14944723.sample"
+type="AudioStreamWAV"
+uid="uid://cqwwj13o3s583"
+path="res://.godot/imported/FlickeringLightSound.wav-f6282f4938bf20609bb27cec14944723.sample"
 
 [deps]
 
 source_file="res://GodotLoadScreen-main/GodotLoadScreenFinal/FlickeringLightSound.wav"
-dest_files=[ "res://.import/FlickeringLightSound.wav-f6282f4938bf20609bb27cec14944723.sample" ]
+dest_files=["res://.godot/imported/FlickeringLightSound.wav-f6282f4938bf20609bb27cec14944723.sample"]
 
 [params]
 
