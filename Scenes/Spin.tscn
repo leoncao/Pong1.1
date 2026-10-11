@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Assets/SpinAssets/Prize Wheel/Wheel Parts/Wheel 1.png" type="Texture" id=1]
+[ext_resource path="res://Assets/SpinAssets/Prize Wheel/Wheel Parts/Wheel 1.png" type="Texture2D" id=1]
 
 [sub_resource type="GDScript" id=1]
-script/source = "extends TextureProgress
+script/source = "extends TextureProgressBar
 
 var spinning_speed: float = 360.0
 var random_stopping_angle: float
@@ -16,7 +16,7 @@ func start_spinning():
 	var tween = Tween.new()
 	add_child(tween)
 	tween.interpolate_property(self, \"radial_initial_angle\", 0, 360, 10, Tween.TRANS_LINEAR)
-	tween.connect(\"tween_completed\", self, \"_on_spin_complete\")
+	tween.connect(\"tween_completed\", Callable(self, \"_on_spin_complete\"))
 	tween.start()
 
 func _on_spin_complete(object: Object, key: NodePath):
@@ -31,20 +31,20 @@ func stop_spinning():
 	# Add your custom logic here (e.g., show a result, trigger an event, etc.)
 
 func _process(delta: float):
-	radial_initial_angle += deg2rad(spinning_speed * delta)
+	radial_initial_angle += deg_to_rad(spinning_speed * delta)
 "
 
 [node name="Spin" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Spinwheel" type="TextureProgress" parent="."]
+[node name="Spinwheel" type="TextureProgressBar" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 429.0
-margin_top = 159.0
-margin_right = -501.0
-margin_bottom = -211.0
+offset_left = 429.0
+offset_top = 159.0
+offset_right = -501.0
+offset_bottom = -211.0
 texture_over = ExtResource( 1 )
 fill_mode = 4
 script = SubResource( 1 )

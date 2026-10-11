@@ -1,16 +1,16 @@
 [gd_scene load_steps=8 format=2]
 
-[ext_resource path="res://Assets/PoetsenOne-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://Assets/PoetsenOne-Regular.ttf" type="FontFile" id=1]
 [ext_resource path="res://Scenes/HowToPlay.gd" type="Script" id=2]
-[ext_resource path="res://Assets/Anta-Regular.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://Assets/Anta-Regular.ttf" type="FontFile" id=3]
 [ext_resource path="res://assets/UI/Theme/UI.tres" type="Theme" id=4]
-[ext_resource path="res://assets/UI/50x50/Icon_Return.png" type="Texture" id=5]
+[ext_resource path="res://assets/UI/50x50/Icon_Return.png" type="Texture2D" id=5]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="FontFile" id=1]
 size = 35
 font_data = ExtResource( 1 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="FontFile" id=2]
 size = 25
 font_data = ExtResource( 3 )
 
@@ -27,7 +27,7 @@ color = Color( 0.113725, 0.0941176, 0.0941176, 1 )
 [node name="Label" type="Label" parent="ColorRect"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 1 )
+theme_override_fonts/font = SubResource( 1 )
 text = "Credit
 
 Tutorial/Assets
@@ -46,12 +46,12 @@ valign = 1
 [node name="Button" type="Button" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 8.0
-margin_top = 656.0
-margin_right = -1137.0
-margin_bottom = -6.0
+offset_left = 8.0
+offset_top = 656.0
+offset_right = -1137.0
+offset_bottom = -6.0
 theme = ExtResource( 4 )
-custom_fonts/font = SubResource( 2 )
+theme_override_fonts/font = SubResource( 2 )
 text = "BACK"
 icon = ExtResource( 5 )
 

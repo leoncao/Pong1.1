@@ -15,11 +15,11 @@ func unlock(achievement_id):
 	if achievements.has(achievement_id) and not achievements[achievement_id]["unlocked"]:
 		achievements[achievement_id]["unlocked"] = true
 		# Show the achievement notification
-		var achievement_notification = achievement_notification_scene.instance()
+		var achievement_notification = achievement_notification_scene.instantiate()
 		achievement_notification.get_node("").text = "Achievement Unlocked: " + achievements[achievement_id]["name"]
 		get_tree().root.add_child(achievement_notification)
 		# Set a timer to hide the achievement notification after a few seconds
-		yield(get_tree().create_timer(3.0), "timeout")
+		await get_tree().create_timer(3.0).timeout
 		achievement_notification.queue_free()
 
 func save_achievements():

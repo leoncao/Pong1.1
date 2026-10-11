@@ -1,20 +1,20 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://assets/Paddle/initialboss_pub.png" type="Texture" id=1]
+[ext_resource path="res://assets/Paddle/initialboss_pub.png" type="Texture2D" id=1]
 [ext_resource path="res://Player/Player.gd" type="Script" id=2]
 
 [sub_resource type="CapsuleShape2D" id=1]
 radius = 16.0
 height = 108.5
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="CharacterBody2D"]
 position = Vector2( 54, 275 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="Sprite" type="Sprite" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2( 0, 0.500011 )
 scale = Vector2( 1, 1.096 )
 texture = ExtResource( 1 )

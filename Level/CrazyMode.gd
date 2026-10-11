@@ -3,7 +3,7 @@ extends Node
 var lastScored = "" 
 var crazyMode = true
 var startTime = 0
-export var currentScore = 0
+@export var currentScore = 0
 var highestScore = 0  # This will keep track of the coins earned in the current game session
 var currentSessionCoins = 0
 var save_file = ConfigFile.new()
@@ -12,9 +12,9 @@ func _ready():
 	get_tree().call_group("BallGroup", "stop_ball")
 	$PauseMenu.hide() 
 	$ModeLabel.text = "Mode: Hardcore"  # Set the initial mode
-	startTime = OS.get_ticks_msec()
+	startTime = Time.get_ticks_msec()
 	$PauseMenu.set_game_mode(self)
-	$Restart.pause_mode = Node.PAUSE_MODE_PROCESS  # Allow the Restart button to process input when the game is paused
+	$Restart.process_mode = Node.PROCESS_MODE_ALWAYS  # Allow the Restart button to process input when the game is paused
 	highestScore = load_high_score()  # Load the highest score at the start of the game
 	Global.load_coins()  # Load the total coins at the start of the game
 	$TotalCoinsLabel.text = "Total Coins: " + str(Global.coins)  # Display the total coins earned across all game sessions
@@ -27,7 +27,7 @@ func _ready():
 		var texture = load(texture_path)
 		#print("Loaded texture: ", texture)  # Print the loaded texture
 		#print("Sprite node before: ", $Player/Sprite.texture)  # Print the Sprite node's texture before the assignment
-		$Player/Sprite.texture = texture
+		$Player/Sprite2D.texture = texture
 		#print("Sprite node after: ", $Player/Sprite.texture)  # Print the Sprite node's texture after the assignment
 	
 		
@@ -51,10 +51,10 @@ func _on_RightWall_body_entered(body):
 func _process(delta):
 	$CountdownLabel.text = str(int($CountdownTimer.time_left) + 1)
 	if crazyMode and not get_tree().paused:
-		if OS.get_ticks_msec() - startTime >= 1000:  # If a second has passed
+		if Time.get_ticks_msec() - startTime >= 1000:  # If a second has passed
 			currentScore += 1  # Increase the current score
 			currentSessionCoins += 0.5  # Increase the coins earned in the current game session
-			startTime = OS.get_ticks_msec()  # Reset the start time
+			startTime = Time.get_ticks_msec()  # Reset the start time
 		$CurrentScoreLabel.text = "Current Score: " + str(currentScore)
 		$HighestScoreLabel.text = "Highest Score: " + str(highestScore)  # Display the highest score
 		$TotalCoinsLabel.text = "Total Coins: " + str(Global.coins)  # Update the total coins earned across all game sessions
@@ -94,7 +94,7 @@ func hide_pause_menu():
 
 func _on_Restart_pressed():
 	get_tree().paused = false  # Unpause the game before changing the scene
-	get_tree().change_scene("res://Level/CrazyMode.tscn")
+	get_tree().change_scene_to_file("res://Level/CrazyMode.tscn")
 
 func save_high_score(score):
 	var file = File.new()
@@ -115,4 +115,4 @@ func load_high_score():
 
 func _on_mainmenubutton_pressed():
 	get_tree().paused = false  # Unpause the game before changing the scene
-	get_tree().change_scene("res://MainMenu.tscn")
+	get_tree().change_scene_to_file("res://MainMenu.tscn")

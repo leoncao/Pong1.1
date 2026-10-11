@@ -2,16 +2,16 @@
 
 [ext_resource path="res://GodotLoadScreen-main/GodotLoadScreenFinal/FlickeringLightSound.wav" type="AudioStream" id=2]
 [ext_resource path="res://GodotLoadScreen-main/GodotLoadScreenFinal/GodotLogoStartup.tscn" type="PackedScene" id=3]
-[ext_resource path="res://GodotLoadScreen-main/GodotLoadScreenFinal/PressStart2P-Regular.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://GodotLoadScreen-main/GodotLoadScreenFinal/PressStart2P-Regular.ttf" type="FontFile" id=4]
 [ext_resource path="res://GodotLoadScreen-main/GodotLoadScreenFinal/GodotStartupScreen.gd" type="Script" id=5]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="FontFile" id=1]
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="FontFile" id=2]
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="FontFile" id=3]
 font_data = ExtResource( 4 )
 
 [sub_resource type="Environment" id=4]
@@ -33,11 +33,11 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -159.811
-margin_top = -160.0
-margin_right = 160.189
-margin_bottom = 160.0
-rect_pivot_offset = Vector2( 160, 160 )
+offset_left = -159.811
+offset_top = -160.0
+offset_right = 160.189
+offset_bottom = 160.0
+pivot_offset = Vector2( 160, 160 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -47,11 +47,11 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -67.0
-margin_top = -48.0
-margin_right = -3.0
-margin_bottom = -32.0
-custom_fonts/font = SubResource( 1 )
+offset_left = -67.0
+offset_top = -48.0
+offset_right = -3.0
+offset_bottom = -32.0
+theme_override_fonts/font = SubResource( 1 )
 text = "MADE"
 align = 1
 valign = 1
@@ -65,11 +65,11 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = 5.0
-margin_top = -48.0
-margin_right = 69.0
-margin_bottom = -32.0
-custom_fonts/font = SubResource( 2 )
+offset_left = 5.0
+offset_top = -48.0
+offset_right = 69.0
+offset_bottom = -32.0
+theme_override_fonts/font = SubResource( 2 )
 text = "With"
 align = 1
 valign = 1
@@ -83,11 +83,11 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -39.0
-margin_top = 32.0
-margin_right = 41.0
-margin_bottom = 48.0
-custom_fonts/font = SubResource( 3 )
+offset_left = -39.0
+offset_top = 32.0
+offset_right = 41.0
+offset_bottom = 48.0
+theme_override_fonts/font = SubResource( 3 )
 text = "godot"
 align = 1
 valign = 1

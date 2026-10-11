@@ -4,7 +4,7 @@ var paddles = ["Paddle1", "Paddle2", "Paddle3"]  # List of paddles that can be w
 var selectedPaddle = ""
 
 func _ready():
-	$Spin.connect("pressed", self, "_on_Spin_pressed")
+	$Spin.connect("pressed", Callable(self, "_on_Spin_pressed"))
 
 func _on_Spin_pressed():
 	selectedPaddle = paddles[randi() % paddles.size()]

@@ -1,9 +1,9 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://assets/Anta-Regular.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/Anta-Regular.ttf" type="FontFile" id=1]
 [ext_resource path="res://godot-credits-master/GodotCredits.gd" type="Script" id=2]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="FontFile" id=1]
 size = 25
 font_data = ExtResource( 1 )
 
@@ -13,23 +13,23 @@ script = ExtResource( 2 )
 [node name="ColorRect" type="ColorRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 1920.0
-margin_bottom = 1080.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 color = Color( 0, 0, 0, 1 )
 
 [node name="CreditsContainer" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 1920.0
-margin_bottom = 1080.0
+offset_right = 1920.0
+offset_bottom = 1080.0
 
 [node name="Line" type="Label" parent="CreditsContainer"]
 anchor_right = 1.0
-margin_left = 4.0
-margin_top = 750.0
-margin_right = -631.0
-margin_bottom = 781.0
+offset_left = 4.0
+offset_top = 750.0
+offset_right = -631.0
+offset_bottom = 781.0
 size_flags_horizontal = 3
-custom_fonts/font = SubResource( 1 )
+theme_override_fonts/font = SubResource( 1 )
 text = "Credits line"
 align = 1
