@@ -4,7 +4,9 @@ extends Area2D
 signal collected(kind: String, ball: Node)
 
 const GameFont = preload("res://Mechanics/GameFont.gd")
-const RADIUS := 24.0
+const RADIUS := 30.0        # 画出来的大小
+const PICKUP_RADIUS := 40.0 # 实际拾取范围比画的大一点，更容易吃到
+const DRIFT := 45.0         # 上下慢慢漂动的幅度
 const INFO := {
 	"long":  {"color": Color("7CFC9A"), "text": "长", "name": "长球拍 LONG"},
 	"multi": {"color": Color("ffb347"), "text": "×3", "name": "多球 MULTI"},
@@ -12,12 +14,15 @@ const INFO := {
 }
 
 var kind := "long"
-var life := 10.0   # 10 秒没人碰就消失
+var life := 14.0   # 14 秒没人碰就消失
+var _t := 0.0
+var _base_y := 0.0
 
 func _ready():
 	add_to_group("PowerUp")
 	var cs := CollisionShape2D.new()
-	var shape := CircleShape2D.new(); shape.radius = RADIUS
+	var shape := CircleShape2D.new(); shape.radius = PICKUP_RADIUS
+	_base_y = position.y
 	cs.shape = shape; add_child(cs)
 	var l := Label.new()
 	l.text = INFO[kind]["text"]
@@ -44,6 +49,8 @@ func _draw():
 
 func _process(delta):
 	life -= delta
+	_t += delta
+	position.y = _base_y + sin(_t * TAU / 5.0) * DRIFT   # 慢慢上下漂，扫过更多路线
 	if life < 2.0:
 		modulate.a = 0.4 + 0.6 * absf(sin(life * 10.0))   # 快消失时闪烁
 	if life <= 0.0:

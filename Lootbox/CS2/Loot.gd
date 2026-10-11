@@ -17,6 +17,9 @@ const RARITIES := [
 
 # 物品池：type = "paddle"(球拍皮肤，用现有图片) 或 "trail"(球拖尾，用颜色生成)
 const ITEMS := [
+	# 默认物品：所有人一开始就有，不会从箱子里开出来
+	{"id": "paddle_initialboss", "name": "Default · 默认",  "type": "paddle", "tier": -1, "default": true, "texture": "res://assets/Paddle/initialboss_pub.png"},
+	{"id": "trail_none",         "name": "Default · 默认",  "type": "trail",  "tier": -1, "default": true, "colors": []},
 	{"id": "paddle_door",        "name": "Door",            "type": "paddle", "tier": 0, "texture": "res://assets/Paddle/door.png"},
 	{"id": "paddle_cadpat",      "name": "Cadpat",          "type": "paddle", "tier": 0, "texture": "res://assets/Paddle/paddle_cadpat.png"},
 	{"id": "paddle_star",        "name": "Star",            "type": "paddle", "tier": 0, "texture": "res://assets/Paddle/star.png"},
@@ -26,7 +29,6 @@ const ITEMS := [
 	{"id": "paddle_star_scale",  "name": "Star Scale",      "type": "paddle", "tier": 1, "texture": "res://assets/Paddle/star_scale.png"},
 	{"id": "trail_violet",       "name": "Trail | Violet",  "type": "trail",  "tier": 1, "colors": ["8847ff", "d0b8ff"]},
 	{"id": "paddle_atheboss",    "name": "The Boss",        "type": "paddle", "tier": 2, "texture": "res://assets/Paddle/atheboss.png"},
-	{"id": "paddle_initialboss", "name": "Initial Boss",    "type": "paddle", "tier": 2, "texture": "res://assets/Paddle/initialboss_pub.png"},
 	{"id": "trail_neon",         "name": "Trail | Neon",    "type": "trail",  "tier": 2, "colors": ["d32ce6", "2ce6d3"]},
 	{"id": "paddle_finalboss",   "name": "Final Boss",      "type": "paddle", "tier": 3, "texture": "res://assets/Paddle/finalboss_pub.png"},
 	{"id": "paddle_levelingrod", "name": "Leveling Rod",    "type": "paddle", "tier": 3, "texture": "res://assets/Paddle/levelingrod_rare.png"},
@@ -38,6 +40,9 @@ const ITEMS := [
 ]
 
 # 箱子：价格 + 钥匙价格，都用游戏里已有的金币支付
+# 默认物品的"稀有度"显示
+const DEFAULT_RARITY := {"name": "Default", "cn": "默认", "color": Color("9aa0a6"), "weight": 0.0, "dup_coins": 0}
+
 const CASES := {
 	"pong_case": {"name": "Pong Case", "price": 20, "key_price": 5},
 }
@@ -50,6 +55,7 @@ var equipped_trail := ""  # 当前装备的拖尾 id，"" = 默认
 func _ready():
 	rng.randomize()
 	load_inventory()
+	migrate_shop_unlocks()
 
 # ---------- 抽奖 ----------
 func item_by_id(id: String) -> Dictionary:
@@ -58,7 +64,10 @@ func item_by_id(id: String) -> Dictionary:
 	return {}
 
 func items_of_tier(tier: int) -> Array:
-	return ITEMS.filter(func(it): return it["tier"] == tier)
+	return ITEMS.filter(func(it): return it["tier"] == tier and not it.get("default", false))
+
+func rarity_of(item: Dictionary) -> Dictionary:
+	return DEFAULT_RARITY if item.get("tier", -1) < 0 else RARITIES[item["tier"]]
 
 # 加权随机：把所有权重排成一条"尺子"，随机扔一个点，看落在哪一段
 func roll_tier(r: RandomNumberGenerator = rng) -> int:
@@ -107,6 +116,7 @@ func grant_item(item: Dictionary) -> Dictionary:
 func owns(id: String) -> bool:
 	if inventory.has(id): return true
 	var it := item_by_id(id)
+	if it.get("default", false): return true   # 默认物品永远拥有
 	if it.get("type") == "paddle":   # 在原来商店里买过的也算拥有
 		var cf := ConfigFile.new()
 		if cf.load(UNLOCKED_PATH) == OK and cf.get_value("unlocked", it["texture"], false):
@@ -119,9 +129,31 @@ func _unlock_in_shop(texture_path: String):
 	cf.set_value("unlocked", texture_path, true)
 	cf.save(UNLOCKED_PATH)
 
-# 背包里拥有的球拍皮肤（给商店页面用）
+# 背包里拥有的物品（type = "paddle" / "trail"），默认物品排最前，然后按稀有度从高到低
+func owned_items(type: String) -> Array:
+	var list := ITEMS.filter(func(it): return it["type"] == type and owns(it["id"]))
+	list.sort_custom(func(a, b):
+		if a.get("default", false) != b.get("default", false): return a.get("default", false)
+		return a["tier"] > b["tier"])
+	return list
+
 func owned_paddles() -> Array:
-	return ITEMS.filter(func(it): return it["type"] == "paddle" and inventory.has(it["id"]))
+	return owned_items("paddle")
+
+# 当前装备的球拍 id（没选过 = 默认）
+func equipped_paddle_id() -> String:
+	var cf := ConfigFile.new()
+	if cf.load(SELECTION_PATH) == OK:
+		var tex = cf.get_value("selection", "texture", "")
+		for it in ITEMS:
+			if it["type"] == "paddle" and it["texture"] == tex: return it["id"]
+	return "paddle_initialboss"
+
+func equipped_trail_id() -> String:
+	return equipped_trail if equipped_trail != "" else "trail_none"
+
+func is_equipped(id: String) -> bool:
+	return id == equipped_paddle_id() or id == equipped_trail_id()
 
 # ---------- 装备 ----------
 func equip(id: String):
@@ -133,12 +165,12 @@ func equip(id: String):
 		cf.set_value("selection", "texture", it["texture"])
 		cf.save(SELECTION_PATH)
 	else:
-		equipped_trail = id
+		equipped_trail = "" if it.get("default", false) else id   # 默认 = 不用彩色拖尾
 		save_inventory()
 
 func trail_gradient(id: String) -> Gradient:
 	var it := item_by_id(id)
-	if it.is_empty() or it["type"] != "trail": return null
+	if it.is_empty() or it["type"] != "trail" or it.get("default", false): return null
 	var g := Gradient.new()
 	var cols: Array = it["colors"]
 	g.offsets = PackedFloat32Array()
@@ -168,3 +200,23 @@ func load_inventory():
 			inventory[id] = cf.get_value("inventory", id)
 	cases_opened = cf.get_value("stats", "cases_opened", 0)
 	equipped_trail = cf.get_value("equipped", "trail", "")
+
+# 迁移：以前在商店(Customization)用金币买过/解锁过的皮肤，全部放进背包，什么都不会丢
+func migrate_shop_unlocks() -> int:
+	var added := 0
+	var cf := ConfigFile.new()
+	if cf.load(UNLOCKED_PATH) == OK and cf.has_section("unlocked"):
+		for tex in cf.get_section_keys("unlocked"):
+			if not cf.get_value("unlocked", tex, false): continue
+			for it in ITEMS:
+				if it["type"] == "paddle" and it["texture"] == tex and not it.get("default", false) and not inventory.has(it["id"]):
+					inventory[it["id"]] = 1; added += 1
+	# 当前正在用的皮肤也算拥有
+	var sel := ConfigFile.new()
+	if sel.load(SELECTION_PATH) == OK:
+		var cur = sel.get_value("selection", "texture", "")
+		for it in ITEMS:
+			if it["type"] == "paddle" and it["texture"] == cur and not it.get("default", false) and not inventory.has(it["id"]):
+				inventory[it["id"]] = 1; added += 1
+	if added > 0: save_inventory()
+	return added

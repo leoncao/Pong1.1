@@ -41,6 +41,7 @@ func _ready():
 	mech.name = "Mechanics"
 	add_child(mech)
 	mech.setup(self, "classic", $Ball, $Player, $Opponent)
+	mech.prepare_serve("Player")   # 第一球由玩家发
 	
 func _on_LeftWall_body_entered(body):
 	#$Ball.position = Vector2(640,320)
@@ -85,6 +86,7 @@ func _process(delta):
 		
 func _on_CountdownTimer_timeout():
 	get_tree().call_group("BallGroup", "restart_ball")
+	mech.on_serve_launched()
 	$CountdownLabel.visible = false
 func score_achieved():
 	$Ball.position = Vector2(640,320)
@@ -94,6 +96,7 @@ func score_achieved():
 	$ScoreSound.play()
 	$Player.position.x = 35
 	$Opponent.position.x = 1280 - 35
+	mech.prepare_serve(lastScored)   # 得分方发球
 	mech.clear_extra_balls()   # 主球得分后，额外的球和假球都清掉
 	check_progress()
 
@@ -124,15 +127,14 @@ func check_progress():
 		await tween.finished  # Wait for the animation to complete
 		popup.hide()  # Hide the popup
 	
-	if PlayerScore == 25: 
-		$Opponent.speed += 50
+	# (原来 25 分时 $Opponent.speed += 50；现在速度按 Difficulty.gd 的等级表)
 	if PlayerScore == 29 and not mech.boss_active:   # 改进：BOSS 只登场一次（原来对手每得 1 分都会重复登场、速度无限叠加）
 		$PlayerScore.hide()  # Hide the player score label
 		$OpponentScore.hide()  # Hide the opponent score label
 #		get_tree().root.get_node("CanvasLayer").modulate = Color(1, 0, 0)  # Change the screen background to red
 		$bossSound.play()  # Play the "Boss" sound
 		shake_camera(5,0.5)
-		$Opponent.speed += 100  # Increase the AI paddle speed
+		# 原来这里 $Opponent.speed += 100；BOSS 速度现在在 Difficulty.gd (AI_MAX_SPEED[6])
 		mech.start_boss()   # BOSS 技能：假球 + 黑暗
 		#$Opponent.scale *= 1  # Increase the AI paddle size
 		#$Opponent/CollisionPolygon2D.scale *= 0.2  # Increase the AI paddle collision shape

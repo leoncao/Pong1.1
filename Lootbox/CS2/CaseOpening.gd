@@ -23,7 +23,6 @@ var strip: Control
 var tick_player: AudioStreamPlayer
 var reveal_player: AudioStreamPlayer
 var popup: PanelContainer
-var inventory_panel: PanelContainer
 
 func _ready():
 	Global.load_coins()
@@ -60,7 +59,7 @@ func _build_ui():
 
 	open_button = _button("OPEN CASE  (%d + KEY %d COINS)" % [Loot.CASES[case_id]["price"], Loot.CASES[case_id]["key_price"]], Vector2(440, 420), Vector2(400, 55))
 	open_button.pressed.connect(_on_open_pressed)
-	var inv_btn := _button("INVENTORY", Vector2(440, 490), Vector2(195, 45)); inv_btn.pressed.connect(_show_inventory)
+	var inv_btn := _button("背包 BACKPACK", Vector2(440, 490), Vector2(195, 45)); inv_btn.pressed.connect(_go_backpack)
 	var back_btn := _button("BACK", Vector2(645, 490), Vector2(195, 45)); back_btn.pressed.connect(_on_back_pressed)
 
 	# 概率表
@@ -88,7 +87,7 @@ func _refresh_coins():
 
 # 一张物品卡片：深色底 + 底部稀有度颜色条 + 图片 + 名字
 func make_card(item: Dictionary) -> Control:
-	var tier = Loot.RARITIES[item["tier"]]
+	var tier = Loot.rarity_of(item)
 	var card := Panel.new()
 	card.custom_minimum_size = Vector2(CARD_W, 150); card.size = Vector2(CARD_W, 150)
 	var sb := StyleBoxFlat.new()
@@ -161,7 +160,7 @@ func _on_spin_finished():
 
 func _show_reveal(result: Dictionary):
 	var item: Dictionary = result["item"]
-	var tier = Loot.RARITIES[item["tier"]]
+	var tier = Loot.rarity_of(item)
 	reveal_player.stream = load("res://assets/Sounds/391539__unlistenable__electro-win-sound.wav" if item["tier"] >= 3 else "res://assets/levelup.wav")
 	reveal_player.play()
 	popup = PanelContainer.new(); popup.name = "RevealPopup"
@@ -178,6 +177,7 @@ func _show_reveal(result: Dictionary):
 	var hb := HBoxContainer.new(); hb.alignment = BoxContainer.ALIGNMENT_CENTER; vb.add_child(hb)
 	if not result["duplicate"]:
 		var eq := Button.new(); eq.text = "EQUIP"; eq.pressed.connect(func(): Loot.equip(item["id"]); eq.text = "EQUIPPED ✓"; eq.disabled = true); hb.add_child(eq)
+	var bp := Button.new(); bp.text = "背包 BACKPACK"; bp.pressed.connect(_go_backpack); hb.add_child(bp)
 	var ok := Button.new(); ok.text = "OK"; ok.pressed.connect(func(): popup.queue_free(); popup = null); hb.add_child(ok)
 	add_child(popup)
 	# 弹出动画：从小变大
@@ -185,23 +185,9 @@ func _show_reveal(result: Dictionary):
 	create_tween().tween_property(popup, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 # ---------- 背包 ----------
-func _show_inventory():
-	if inventory_panel: inventory_panel.queue_free()
-	inventory_panel = PanelContainer.new(); inventory_panel.name = "InventoryPanel"
-	inventory_panel.position = Vector2(140, 90); inventory_panel.custom_minimum_size = Vector2(1000, 560)
-	var root := VBoxContainer.new(); inventory_panel.add_child(root)
-	root.add_child(_label("INVENTORY  (开过 %d 个箱子)" % Loot.cases_opened, 24, Color.WHITE))
-	var sc := ScrollContainer.new(); sc.custom_minimum_size = Vector2(980, 450); root.add_child(sc)
-	var grid := GridContainer.new(); grid.columns = 6; sc.add_child(grid)
-	for it in Loot.ITEMS:
-		if not Loot.inventory.has(it["id"]): continue
-		var vb := VBoxContainer.new(); vb.add_child(make_card(it))
-		var b := Button.new(); b.text = "EQUIP"
-		var id: String = it["id"]
-		b.pressed.connect(func(): Loot.equip(id); b.text = "EQUIPPED ✓")
-		vb.add_child(b); grid.add_child(vb)
-	var close := Button.new(); close.text = "CLOSE"; close.pressed.connect(func(): inventory_panel.queue_free(); inventory_panel = null); root.add_child(close)
-	add_child(inventory_panel)
+func _go_backpack():
+	if spinning: return
+	get_tree().change_scene_to_file("res://Lootbox/CS2/Backpack.tscn")
 
 func _on_back_pressed():
 	if spinning: return

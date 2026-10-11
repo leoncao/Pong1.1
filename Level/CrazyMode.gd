@@ -46,6 +46,7 @@ func _setup_mechanics():
 	mech.name = "Mechanics"
 	add_child(mech)
 	mech.setup(self, "crazy", $CrazyBall, $Player, $CrazyAI)
+	mech.prepare_serve("Player")   # 玩家发球
 	$Player.ball_hit.connect(func(_b): combo += 1)
 
 func _on_LeftWall_body_entered(body):
@@ -93,6 +94,7 @@ func _process(delta):
 
 func _on_CountdownTimer_timeout():
 	get_tree().call_group("BallGroup", "restart_ball")
+	mech.on_serve_launched()
 	$CountdownLabel.visible = false
 
 func stop_game():

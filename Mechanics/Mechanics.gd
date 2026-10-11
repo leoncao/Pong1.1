@@ -6,19 +6,22 @@ const PowerUp = preload("res://Mechanics/PowerUp.gd")
 const Portal = preload("res://Mechanics/Portal.gd")
 const Hud = preload("res://Mechanics/Hud.gd")
 const TRAIL_SCENE = preload("res://Scenes/BallTrail.tscn")
+const Difficulty = preload("res://Mechanics/Difficulty.gd")
 
 # ---- 平衡参数（想调整手感就改这里）----
 const POWERUP_TYPES := ["long", "multi", "slow"]
-const POWERUP_INTERVAL := Vector2(10.0, 15.0)   # 每隔 10~15 秒刷新一个道具（场上最多 1 个）
-const POWERUP_AREA := Rect2(440, 140, 400, 440) # 只在中间区域出现
+const POWERUP_INTERVAL := Vector2(8.0, 12.0)    # 每隔 8~12 秒刷新一个道具（场上最多 1 个）
+const POWERUP_X := Vector2(420.0, 860.0)        # 出现在两个球拍之间的中段
+const POWERUP_LANE_SPREAD := 110.0              # 放在球"将要经过的路线"附近 ±110 像素
+const SERVE_CLEAR_TIME := 1.0                   # 发球后 1 秒内砖块是"虚影"，不挡发球
 const LONG_TIME := 8.0          # 长球拍持续 8 秒
 const LONG_SCALE := 1.6         # 变长 1.6 倍
 const SLOW_TIME := 6.0          # 减速持续 6 秒
 const SLOW_MULT := 0.5          # 速度变成一半
 const MAX_EXTRA_BALLS := 4
-const DECOY_INTERVAL := 10.0    # BOSS 每 10 秒放一个假球
+const DECOY_INTERVAL := Difficulty.BOSS_DECOY_INTERVAL    # BOSS 放假球的间隔（数值在 Difficulty.gd）
 const DECOY_LIFE := 7.0
-const DARK_INTERVAL := Vector2(14.0, 20.0)  # BOSS 每 14~20 秒让场地变黑一次
+const DARK_INTERVAL := Difficulty.BOSS_DARK_INTERVAL   # BOSS 让场地变黑的间隔
 const DARK_TIME := 2.5
 
 var game: Node
@@ -43,6 +46,8 @@ var dark_timer := 8.0
 var crazy_time := 0.0
 var crazy_stage := 0
 var _trail_states := {}
+var serving := false     # 发球阶段（倒计时 + 发出后 1 秒）
+var _serve_id := 0       # 每次发球编号 +1，旧的计时器就知道自己"过期"了
 var sfx := {}
 var stats := {"powerups": 0, "decoys": 0, "darkness": 0, "teleports": 0, "charged": 0}
 
@@ -50,9 +55,10 @@ func setup(g: Node, m: String, ball: Node2D, pl: Node2D, opp: Node2D):
 	game = g; mode = m; main_ball = ball; player = pl; opponent = opp
 	ball_scene = load(ball.scene_file_path)
 	rng.randomize()
-	pl.add_to_group("paddles"); opp.add_to_group("paddles")
-	if pl.has_signal("charged_shot"):
-		pl.charged_shot.connect(_on_charged_shot)
+	pl.add_to_group("paddles"); opp.add_to_group("paddles"); pl.add_to_group("player_paddle")
+	for p in [pl, opp]:   # 玩家蓄力球 和 BOSS 快球 都放特效
+		if p.has_signal("charged_shot"):
+			p.charged_shot.connect(_on_charged_shot)
 	var sounds := {"pickup": "res://assets/levelup.wav", "decoy": "res://assets/Sounds/boss_laugh.mp3",
 			"dark": "res://assets/Sounds/boss_sound.wav", "portal": "res://assets/Sounds/pingpongboard.ogg",
 			"charge": "res://assets/Sounds/pingpongbat.ogg", "spawn": "res://assets/ping_pong_8bit_plop.ogg"}
@@ -95,13 +101,26 @@ func _ball_in_play() -> bool:
 func spawn_powerup(kind: String, pos = null) -> Node:
 	var p := PowerUp.new()
 	p.kind = kind
-	p.position = pos if pos != null else Vector2(
-		rng.randf_range(POWERUP_AREA.position.x, POWERUP_AREA.end.x),
-		rng.randf_range(POWERUP_AREA.position.y, POWERUP_AREA.end.y))
+	p.position = pos if pos != null else _powerup_spot()
 	p.collected.connect(_on_powerup_collected)
 	game.add_child(p)
 	play("spawn")
 	return p
+
+# 道具放在球"真的会经过"的地方：用预判算出球飞到 x 时的 y，再随机偏一点
+func _powerup_spot() -> Vector2:
+	var x := rng.randf_range(POWERUP_X.x, POWERUP_X.y)
+	var y := rng.randf_range(120.0, 600.0)
+	if _ball_in_play():
+		var v: Vector2 = main_ball.velocity
+		var lane := Difficulty.predict_y(main_ball.global_position, v, x)
+		# 如果球正在远离这个 x，就算它反弹回来后的路线（方向反过来再算一次）
+		if signf(x - main_ball.global_position.x) != signf(v.x):
+			var far_x := 1180.0 if v.x > 0 else 100.0
+			var far_y := Difficulty.predict_y(main_ball.global_position, v, far_x)
+			lane = Difficulty.predict_y(Vector2(far_x, far_y), Vector2(-v.x, v.y), x)
+		y = lane + rng.randf_range(-POWERUP_LANE_SPREAD, POWERUP_LANE_SPREAD)
+	return Vector2(x, clampf(y, 90.0, 630.0))
 
 func _on_powerup_collected(kind: String, ball: Node):
 	# 碰撞回调里不能直接加/改物理物体，所以"等这一帧物理算完"再生效
@@ -205,7 +224,11 @@ func spawn_multiball(src: Node) -> Array:
 func fire_decoy() -> Node:
 	if not is_instance_valid(opponent): return null
 	var spd: float = main_ball.speed if main_ball.speed > 0 else 600.0
-	var b = _new_ball(opponent.global_position + Vector2(-70, 0), Vector2(-1, rng.randf_range(-0.6, 0.6)), spd, ["DecoyBall"])
+	var start: Vector2 = opponent.global_position + Vector2(-80, 0)
+	# 假球瞄准玩家球拍的"另一边"，逼你去追
+	var aim_y: float = 600.0 if player.global_position.y < 360.0 else 120.0
+	var dir := (Vector2(60, aim_y) - start).normalized()
+	var b = _new_ball(start, Vector2(-1, dir.y / absf(dir.x)), spd * 1.1, ["DecoyBall"])
 	b.remove_from_group("BallGroup")    # 假球不会被"暂停/重新发球"影响，也不能吃道具
 	b.modulate = Color(1, 0.35, 0.35, 0.8)
 	get_tree().create_timer(DECOY_LIFE, false).timeout.connect(b.queue_free)   # 7 秒后自动消失（球先没了也没关系）
@@ -321,6 +344,7 @@ func add_brick(x: float, y_from: float, y_to: float, period: float = 3.0) -> Nod
 	b.position = Vector2(x, y_from)
 	b.add_to_group("Obstacle")
 	game.add_child(b)
+	if serving: _ghost_brick(b, true)   # 升级时正好在发球阶段：先做虚影
 	var tw := b.create_tween().set_loops()
 	tw.tween_property(b, "position:y", y_to, period).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tw.tween_property(b, "position:y", y_from, period).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
@@ -362,6 +386,34 @@ func _crazy_milestones():
 		crazy_stage = 4; add_brick(540, 490, 230, 2.5)
 	elif crazy_stage == 4 and crazy_time >= 120.0:
 		crazy_stage = 5; start_boss()
+
+# ================= 发球 =================
+# 得分的一方发球：球贴在得分方球拍前面，倒计时结束后朝对手发出
+func prepare_serve(winner: String):
+	var paddle = player if winner != "AI" else opponent
+	var dir := 1.0 if paddle == player else -1.0
+	if is_instance_valid(main_ball) and main_ball.has_method("prepare_serve"):
+		main_ball.prepare_serve(paddle, dir)
+	serving = true
+	_serve_id += 1
+	_ghost_bricks(true)
+
+# 倒计时结束、球发出去时调用
+func on_serve_launched():
+	var my_id := _serve_id
+	get_tree().create_timer(SERVE_CLEAR_TIME, false).timeout.connect(func():
+		if my_id != _serve_id: return   # 这期间又发了新球，不管
+		serving = false
+		_ghost_bricks(false))
+
+func _ghost_bricks(on: bool):
+	for b in get_tree().get_nodes_in_group("Obstacle"):
+		if b is AnimatableBody2D:
+			_ghost_brick(b, on)
+
+func _ghost_brick(b: Node, on: bool):
+	b.get_child(0).set_deferred("disabled", on)   # 关掉碰撞
+	b.modulate.a = 0.3 if on else 1.0              # 半透明 = 虚影
 
 # 游戏结束时调用：停止所有新玩法
 func stop_all():
