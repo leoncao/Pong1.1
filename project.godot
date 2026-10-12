@@ -11,7 +11,8 @@ config_version=5
 [application]
 
 config/name="The Pong Dev"
-config/description="The Pong Game 1.1.0"
+config/description="The Pong Game 2.0"
+config/version="2.0"
 run/main_scene="res://GodotLoadScreen-main/GodotLoadScreenFinal/GodotStartupScreen.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/bg_color=Color(0.141176, 0.141176, 0.141176, 0)
@@ -36,10 +37,6 @@ window/stretch/mode="canvas_items"
 
 common/drop_mouse_on_gui_input_disabled=true
 
-[locale]
-
-locale_filter=[0, ["zh_CN"]]
-
 [physics]
 
 common/enable_pause_aware_picking=true
@@ -49,3 +46,8 @@ common/enable_pause_aware_picking=true
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 environment/defaults/default_environment="res://default_env.tres"
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://localization/strings.en.translation", "res://localization/strings.zh_CN.translation")
+locale/fallback="en"

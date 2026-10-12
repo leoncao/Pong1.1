@@ -19,7 +19,7 @@ func _ready():
 	$CountdownTimer.start()
 	get_tree().call_group("BallGroup", "stop_ball")
 	$PauseMenu.hide() 
-	$ModeLabel.text = "Mode: Classic"  # Set the initial mode
+	$ModeLabel.text = tr("MODE_CLASSIC")  # Set the initial mode
 	$PauseMenu.set_game_mode(self)
 		# Add the popup and tween nodes to the scene
 	var save_file = ConfigFile.new()  # Create a new ConfigFile instance
@@ -30,7 +30,7 @@ func _ready():
 		$Player/Sprite2D.texture = texture
 	# Add the popup and tween nodes to the scene
 	add_child(popup)
-	popup.text = "You reached Level 1"
+	popup.text = tr("LEVEL_REACHED") % 1
 	popup.custom_minimum_size = Vector2(200, 50)  # Set the size of the popup
 	#popup.rect_centered = true  # Center the popup
 	popup.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER  # Align the text to the center
@@ -112,9 +112,9 @@ func check_progress():
 			get_tree().call_group("BallGroup", "increase_speed")
 		# Show the level up popup
 		if difficultyLevel <= 5:
-			popup.text = "You reached Level " + str(difficultyLevel)
+			popup.text = tr("LEVEL_REACHED") % difficultyLevel
 		else:
-			popup.text = "THE BOSS APPEARS"
+			popup.text = tr("BOSS_APPEARS")
 		# ... rest of your code ...		# Show the level up popup
 		
 		popup.show()  # Show the popup

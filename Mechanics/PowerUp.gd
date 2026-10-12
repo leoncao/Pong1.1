@@ -8,9 +8,9 @@ const RADIUS := 30.0        # 画出来的大小
 const PICKUP_RADIUS := 40.0 # 实际拾取范围比画的大一点，更容易吃到
 const DRIFT := 45.0         # 上下慢慢漂动的幅度
 const INFO := {
-	"long":  {"color": Color("7CFC9A"), "text": "长", "name": "长球拍 LONG"},
-	"multi": {"color": Color("ffb347"), "text": "×3", "name": "多球 MULTI"},
-	"slow":  {"color": Color("6ad1ff"), "text": "慢", "name": "减速 SLOW"},
+	"long":  {"color": Color("7CFC9A"), "text": "PU_LONG_ICON", "name": "PU_LONG"},
+	"multi": {"color": Color("ffb347"), "text": "PU_MULTI_ICON", "name": "PU_MULTI"},
+	"slow":  {"color": Color("6ad1ff"), "text": "PU_SLOW_ICON", "name": "PU_SLOW"},
 }
 
 var kind := "long"
@@ -25,7 +25,7 @@ func _ready():
 	_base_y = position.y
 	cs.shape = shape; add_child(cs)
 	var l := Label.new()
-	l.text = INFO[kind]["text"]
+	l.text = tr(INFO[kind]["text"])
 	l.add_theme_font_override("font", GameFont.get_font())
 	l.add_theme_font_size_override("font_size", 20)
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

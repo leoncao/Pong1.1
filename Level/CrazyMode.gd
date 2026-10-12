@@ -21,13 +21,13 @@ func _ready():
 	$CountdownTimer.start()
 	get_tree().call_group("BallGroup", "stop_ball")
 	$PauseMenu.hide() 
-	$ModeLabel.text = "Mode: Hardcore"  # Set the initial mode
+	$ModeLabel.text = tr("MODE_HARDCORE")  # Set the initial mode
 	startTime = Time.get_ticks_msec()
 	$PauseMenu.set_game_mode(self)
 	$Restart.process_mode = Node.PROCESS_MODE_ALWAYS  # Allow the Restart button to process input when the game is paused
 	highestScore = load_high_score()  # Load the highest score at the start of the game
 	Global.load_coins()  # Load the total coins at the start of the game
-	$TotalCoinsLabel.text = "Total Coins: " + str(Global.coins)  # Display the total coins earned across all game sessions
+	$TotalCoinsLabel.text = tr("TOTAL_COINS") % str(Global.coins)
 		# Load the player's selection
 	var save_file = ConfigFile.new()  # Create a new ConfigFile instance
 	var error = save_file.load("user://selection.cfg")
@@ -52,8 +52,13 @@ func _setup_mechanics():
 func _on_LeftWall_body_entered(body):
 	var kind = mech.classify(body)
 	if kind == "other": return
-	if kind == "decoy" or kind == "extra":   # 额外的球/假球漏了不算输
+	if kind == "decoy":
 		mech.remove_ball(body); return
+	if kind == "extra":   # 额外的球漏了不算输：球消失，连击清零
+		mech.remove_ball(body)
+		if combo > 0: mech.hud.flash(tr("CRAZY_EXTRA_MISSED"), Color("ff8c8c"))
+		combo = 0
+		return
 	$CrazyBall.position = Vector2(640,320)
 	lastScored = "AI" 
 	stop_game() 
@@ -68,13 +73,23 @@ func _on_RightWall_body_entered(body):
 		mech.remove_ball(body); return
 	if kind == "extra":   # 额外的球打进对方球门：奖励 +3 分、+1 金币
 		mech.remove_ball(body); currentScore += 3; currentSessionCoins += 1.0; $ScoreSound.play(); return
-	$CrazyBall.position = Vector2(640,320)
-	lastScored = "Player" 
-	stop_game()
-	if not $GameOver.visible:  # Only show the You Win text if the Game Over text is not visible
-		$YouWin.visible = true 
-	$Restart.visible = true
-	$mainmenubutton.visible = true 
+	# 疯狂模式：主球打进 AI 的门不再结束本局（以前会直接 Game Over）。
+	# 多球时 AI 会去追别的球，主球溜过去很常见 → 改成奖励 +5 分、+2 金币，然后玩家重新发球（球速保持）
+	lastScored = "Player"
+	currentScore += 5; currentSessionCoins += 2.0
+	$ScoreSound.play()
+	mech.hud.flash(tr("CRAZY_AI_MISSED"), Color("7CFC9A"))
+	_reserve()
+
+# 重新发球：保留当前球速（疯狂模式的难度主要来自球速）
+var _resume_speed := 0.0
+func _reserve():
+	_resume_speed = $CrazyBall.speed
+	mech.clear_extra_balls()
+	get_tree().call_group("BallGroup", "stop_ball")
+	mech.prepare_serve("Player")
+	$CountdownLabel.visible = true
+	$CountdownTimer.start()
 
 func _process(delta):
 	$CountdownLabel.text = str(int($CountdownTimer.time_left) + 1)
@@ -88,12 +103,14 @@ func _process(delta):
 				currentScore += 1  # Increase the current score
 				currentSessionCoins += 0.5 * coin_multiplier()  # Increase the coins earned in the current game session
 		mech.hud.set_crazy(alive_time, currentScore, highestScore, currentSessionCoins, combo, coin_multiplier())
-		$CurrentScoreLabel.text = "Current Score: " + str(currentScore)
-		$HighestScoreLabel.text = "Highest Score: " + str(highestScore)  # Display the highest score
-		$TotalCoinsLabel.text = "Total Coins: " + str(Global.coins)  # Update the total coins earned across all game sessions
+		$CurrentScoreLabel.text = tr("CUR_SCORE") % currentScore
+		$HighestScoreLabel.text = tr("HIGH_SCORE") % highestScore  # Display the highest score
+		$TotalCoinsLabel.text = tr("TOTAL_COINS") % str(Global.coins)  # Update the total coins earned across all game sessions
 
 func _on_CountdownTimer_timeout():
 	get_tree().call_group("BallGroup", "restart_ball")
+	if _resume_speed > 0.0:
+		$CrazyBall.speed = _resume_speed; _resume_speed = 0.0
 	mech.on_serve_launched()
 	$CountdownLabel.visible = false
 
@@ -109,7 +126,7 @@ func stop_game():
 			save_high_score(highestScore)  # Save the new highest score
 		Global.coins += currentSessionCoins  # Add the coins earned in the current game session to the total coins
 		Global.save_coins()  # Save the total coins
-		$ScoreSummary.text = "Current Score: " + str(currentScore) + "\nHighest Score: " + str(highestScore) + "\nCoins Earned: " + str(currentSessionCoins)
+		$ScoreSummary.text = tr("SCORE_SUMMARY") % [currentScore, highestScore, str(currentSessionCoins)]
 
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):

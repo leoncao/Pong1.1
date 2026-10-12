@@ -19,7 +19,7 @@ func update_ui():
 		var achievement = Achievements.achievements[achievement_id]
 		var hbox_container = HBoxContainer.new()
 		var name_label = Label.new()
-		name_label.text = achievement["name"]
+		name_label.text = tr(achievement["name"])
 		hbox_container.add_child(name_label)
 		var status_texture = TextureRect.new()
 		if achievement["unlocked"]:

@@ -28,18 +28,7 @@ color = Color( 0.113725, 0.0941176, 0.0941176, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme_override_fonts/font = SubResource( 1 )
-text = "Credit
-
-Tutorial/Assets
-https://www.youtube.com/@ClearCode
-
-Sound
-
-Smooth Strings.wav by BuytheField 
-Level Up / Mission Complete by Beetlemuse
-
-Programming/Code
-Special thanks to our AI companion, Microsoft Copilot."
+text = "CREDIT_BODY"
 align = 1
 valign = 1
 

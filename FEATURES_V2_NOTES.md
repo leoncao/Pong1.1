@@ -263,3 +263,59 @@ b.position = at
 game.add_child(b)
 ```
 新增测试在**球门开着**的真实流程里检查：吃到道具后 3 个球都在、AI 没有白得分、假球能飞出来。
+
+## 11. 2.0 版：中文支持（本地化）、背包乱码、疯狂模式多球
+
+### 11.1 背包乱码是怎么回事？
+游戏里自带一个"中文字体子集" `assets/fonts/NotoSansSC-subset.otf`，只装了游戏用到的汉字（完整中文字体有十几 MB，太大）。
+做背包时新加了「已收集」「无拖尾」「开箱」这些字，**但子集没有重新生成**，所以缺了 `收 集 无 「 」` 这几个字。
+在我们的测试电脑（Linux）上，Godot 会自动借用系统字体补字，所以截图正常；**网页版没有系统字体可借**，缺的字就变成方块（乱码）。
+
+修法：
+- 重新生成子集，扫描项目里**所有**文字（脚本、场景、翻译表）+ 常用标点，现在 700 个字符，330 KB；
+- 新增测试 `font_covers_all_translations`：翻译表里只要有一个字字体里没有，测试就失败；
+- 截图时故意**禁用系统字体**（模拟网页版），保证看到的就是玩家看到的。
+- 旧版对比图：`shots_v5/00_BEFORE_v4_backpack_missing_glyphs.png`（能看到 "已□□"）。
+
+**以后改了中文文字，记得运行一次：**
+```bash
+pip install fonttools
+python3 tools/make_font_subset.py
+```
+
+### 11.2 疯狂模式：多球一出现就结束？
+真正的原因不是"额外的球漏了"（那个本来就不算输），而是：**AI 去接离它最近的那个额外球，主球就从另一边溜进了 AI 的门**——疯狂模式原来的规则是"主球进 AI 的门 = 本局结束"。
+现在的规则：
+| 情况 | 结果 |
+|---|---|
+| 主球漏过**你** | 本局结束（唯一的结束方式） |
+| 主球进 **AI** 的门 | +5 分、+2 金币，你重新发球（球速保持不变） |
+| 额外的球漏过你 | 球消失，连击清零，不结束 |
+| 额外的球进 AI 的门 | +3 分、+1 金币 |
+| 额外的球 | 最多存在 12 秒（`Mechanics.gd` 里的 `CRAZY_EXTRA_LIFE`） |
+
+### 11.3 中英文切换是怎么做的？
+Godot 自带"翻译服务器" `TranslationServer`。我们准备一张表格 `localization/strings.csv`：
+
+```csv
+keys,en,zh_CN
+CLASSIC,CLASSIC,经典模式
+LEVEL_REACHED,You reached Level %d,升到第 %d 级！
+```
+- 第一列是 **key**（暗号），后面两列是英文和中文；
+- Godot 打开项目时会把 CSV 自动"导入"成 `strings.en.translation` 和 `strings.zh_CN.translation`，在 `project.godot` 的 `[internationalization]` 里登记好了；
+- **场景里的按钮/文字**：文字写成 key（比如按钮写 `CLASSIC`），Godot 会自动换成当前语言；
+- **代码里的文字**：用 `tr("KEY")`，带数字的用 `%`：
+```gdscript
+popup.text = tr("LEVEL_REACHED") % 3     # 中文显示"升到第 3 级！"
+```
+- 第一次启动时跟随系统语言（系统是中文就用中文），主菜单右上角按钮可切换，选择保存在 `user://settings.cfg`（见 `Global.gd` 的 `load_language / set_language`）。
+- 菜单原来的英文字体（Orbitron、Anta…）没有中文：`Global.gd` 会给每个界面用到的字体加上"中文备用字体"（fallback），所以任何字体都能显示中文。
+
+### 11.4 怎么加一句新的翻译文字？（3 步）
+1. 打开 `localization/strings.csv`，加一行：`MY_NEW_TEXT,Hello!,你好！`（文字里有逗号或换行就用英文双引号把整格包起来）；
+2. 代码里写 `label.text = tr("MY_NEW_TEXT")`，或者在场景里把文字直接写成 `MY_NEW_TEXT`；
+3. 运行 `python3 tools/make_font_subset.py`（让字体里有新汉字），再用 Godot 打开一次项目（自动重新导入 CSV）。
+
+测试：`zz_check/v5_test.tscn`（19 项：疯狂模式多球、翻译、语言保存、字体覆盖、菜单按钮）。
+截图（导出版真实渲染、禁用系统字体）：`/workspace/godot-upgrade/shots_v5/`，`en_*` 是英文，`zh_CN_*` 是中文。

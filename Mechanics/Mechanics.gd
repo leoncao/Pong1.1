@@ -21,6 +21,7 @@ const SLOW_MULT := 0.5          # 速度变成一半
 const MAX_EXTRA_BALLS := 4
 const DECOY_INTERVAL := Difficulty.BOSS_DECOY_INTERVAL    # BOSS 放假球的间隔（数值在 Difficulty.gd）
 const DECOY_LIFE := 7.0
+const CRAZY_EXTRA_LIFE := 12.0   # 疯狂模式里多球道具的额外球存在 12 秒
 const DARK_INTERVAL := Difficulty.BOSS_DARK_INTERVAL   # BOSS 让场地变黑的间隔
 const DARK_TIME := 2.5
 
@@ -136,10 +137,10 @@ func _apply_powerup(kind: String, ball: Node):
 		"long": apply_long(hitter)        # 最后碰球的人球拍变长
 		"multi": spawn_multiball(ball)    # 一个球变三个
 		"slow": apply_slow(other)         # 另一方球拍变慢
-	hud.flash(PowerUp.INFO[kind]["name"], PowerUp.INFO[kind]["color"])
+	hud.flash(tr(PowerUp.INFO[kind]["name"]), PowerUp.INFO[kind]["color"])
 
 func _who(p: Node) -> String:
-	return "(你 YOU)" if p == player else "(对手 AI)"
+	return tr("WHO_YOU") if p == player else tr("WHO_AI")
 
 func _scaled_parts(paddle: Node) -> Array:
 	var parts := []
@@ -158,7 +159,7 @@ func apply_long(paddle: Node):
 		saved[c] = c.scale
 		c.scale.y *= LONG_SCALE
 	effects[key] = {"kind": "long", "target": paddle, "time_left": LONG_TIME, "saved": saved,
-		"label": PowerUp.INFO["long"]["name"], "who": _who(paddle)}
+		"label": tr(PowerUp.INFO["long"]["name"]), "who": _who(paddle)}
 
 func apply_slow(paddle: Node):
 	var key := "slow_" + paddle.name
@@ -167,7 +168,7 @@ func apply_slow(paddle: Node):
 		var spr = paddle.get_node_or_null("Sprite2D")
 		if spr: spr.self_modulate = Color("6ad1ff")
 	effects[key] = {"kind": "slow", "target": paddle, "time_left": SLOW_TIME,
-		"label": PowerUp.INFO["slow"]["name"], "who": _who(paddle)}
+		"label": tr(PowerUp.INFO["slow"]["name"]), "who": _who(paddle)}
 
 func _update_effects(delta: float):
 	for key in effects.keys():
@@ -221,6 +222,8 @@ func spawn_multiball(src: Node) -> Array:
 		if get_tree().get_nodes_in_group("ExtraBall").size() >= MAX_EXTRA_BALLS: break
 		var b = _new_ball(src.global_position, src.velocity.rotated(ang), spd, ["ExtraBall"])
 		b.last_hitter = src.last_hitter
+		if mode == "crazy":   # 疯狂模式：额外的球最多存在 CRAZY_EXTRA_LIFE 秒
+			get_tree().create_timer(CRAZY_EXTRA_LIFE, false).timeout.connect(b.queue_free)
 		made.append(b)
 	return made
 
@@ -259,7 +262,7 @@ func start_boss():
 	boss_active = true
 	decoy_timer = 4.0
 	dark_timer = 8.0
-	hud.flash("BOSS 技能：假球 + 黑暗！ / BOSS SKILLS!", Color("eb4b4b"))
+	hud.flash(tr("BOSS_SKILLS"), Color("eb4b4b"))
 
 func _make_darkness():
 	darkness = ColorRect.new()
@@ -352,7 +355,7 @@ func add_brick(x: float, y_from: float, y_to: float, period: float = 3.0) -> Nod
 	tw.tween_property(b, "position:y", y_to, period).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tw.tween_property(b, "position:y", y_from, period).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	obstacles.append(b)
-	hud.flash("新障碍：移动砖块 / NEW: moving brick", Color("e4ae39"))
+	hud.flash(tr("NEW_BRICK"), Color("e4ae39"))
 	return b
 
 func add_portal_pair(a: Vector2, b: Vector2) -> Array:
@@ -363,7 +366,7 @@ func add_portal_pair(a: Vector2, b: Vector2) -> Array:
 		p.teleported.connect(func(_ball): stats["teleports"] += 1; play("portal"))
 		game.add_child(p)
 		obstacles.append(p)
-	hud.flash("新障碍：传送门 / NEW: portals", Color("8847ff"))
+	hud.flash(tr("NEW_PORTALS"), Color("8847ff"))
 	return [p1, p2]
 
 # 经典模式每升一级加一个障碍（最多 3 个，避免太乱）
@@ -380,7 +383,7 @@ func _add_level_obstacle(level: int):
 func _crazy_milestones():
 	if crazy_stage == 0 and crazy_time >= 20.0:
 		crazy_stage = 1; powerups_enabled = true; spawn_timer = 0.0
-		hud.flash("道具出现！/ POWER-UPS ON")
+		hud.flash(tr("POWERUPS_ON"))
 	elif crazy_stage == 1 and crazy_time >= 40.0:
 		crazy_stage = 2; add_brick(640, 230, 490)
 	elif crazy_stage == 2 and crazy_time >= 70.0:

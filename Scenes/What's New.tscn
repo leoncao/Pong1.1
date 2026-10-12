@@ -30,20 +30,7 @@ anchor_bottom = 1.0
 offset_left = 73.0
 offset_right = -7.0
 theme_override_fonts/font = SubResource( 1 )
-text = "
-What's new Patch 1.1.0
-
-Content Update
-
-     Redesigned Main Menu screen with better visual appearance
-     New background added
-
-Customization Menu
-     Player can now use coins to unlock different skin for their paddle
-
-Classic Mode:
-     Added skin for final boss level
-     Added New gameplay background"
+text = "WHATSNEW_BODY"
 
 [node name="Button" type="Button" parent="."]
 anchor_right = 1.0

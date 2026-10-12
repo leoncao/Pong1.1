@@ -24,15 +24,15 @@ func unlock(achievement_id):
 		var achievement_notification = CanvasLayer.new()
 		achievement_notification.layer = 100
 		var label = Label.new()
-		label.text = "Achievement Unlocked: " + achievements[achievement_id]["name"]
+		label.text = tr("ACH_UNLOCKED") % tr(achievements[achievement_id]["name"])
 		achievement_notification.add_to_group("AchievementPopup")
 		var stacked = get_tree().get_nodes_in_group("AchievementPopup").size()
 		label.position = Vector2(20, 20 + 30 * stacked)   # 同时解锁多个成就时往下排，不会叠在一起
 		achievement_notification.add_child(label)
 		get_tree().root.add_child(achievement_notification)
 		# Set a timer to hide the achievement notification after a few seconds
-		await get_tree().create_timer(3.0).timeout
-		achievement_notification.queue_free()
+		# 计时器直接连到这个提示的 queue_free：提示如果已经被别处删掉，连接会自动断开，不会崩溃
+		get_tree().create_timer(3.0).timeout.connect(achievement_notification.queue_free)
 
 func save_achievements():
 	var save_file = ConfigFile.new()

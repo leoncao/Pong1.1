@@ -12,10 +12,10 @@ func _ready():
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	theme = preload("res://Mechanics/UiStyle.gd").make_theme()   # 明确的按钮样式（见 UiStyle.gd）
 	var bg := ColorRect.new(); bg.color = Color("14151b"); bg.set_anchors_preset(Control.PRESET_FULL_RECT); add_child(bg)
-	var title := _label("背包 / BACKPACK", 40, Color.WHITE); title.position = Vector2(40, 18); add_child(title)
+	var title := _label(tr("BACKPACK"), 40, Color.WHITE); title.position = Vector2(40, 18); add_child(title)
 	header = _label("", 18, Color(0.8, 0.8, 0.85)); header.position = Vector2(44, 76); add_child(header)
-	var cases_btn := _button("开箱 CASES", Vector2(860, 26), Vector2(180, 48)); cases_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://Lootbox/CS2/CaseOpening.tscn"))
-	var back_btn := _button("返回 BACK", Vector2(1056, 26), Vector2(180, 48)); back_btn.pressed.connect(_on_back)
+	var cases_btn := _button(tr("CASES"), Vector2(860, 26), Vector2(180, 48)); cases_btn.pressed.connect(func(): get_tree().change_scene_to_file("res://Lootbox/CS2/CaseOpening.tscn"))
+	var back_btn := _button(tr("BACK"), Vector2(1056, 26), Vector2(180, 48)); back_btn.pressed.connect(_on_back)
 	var sc := ScrollContainer.new(); sc.name = "Scroll"
 	sc.position = Vector2(30, 110); sc.size = Vector2(1220, 595)
 	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -32,10 +32,10 @@ func refresh():
 		if it.get("default", false): continue
 		total += 1
 		if Loot.owns(it["id"]): owned += 1
-	header.text = "已收集 Collected %d/%d   ·   开过箱子 Cases opened %d   ·   金币 Coins %s" % [owned, total, Loot.cases_opened, str(Global.coins)]
-	_section("球拍皮肤 / PADDLE SKINS", Loot.owned_items("paddle"))
-	_section("球拖尾 / BALL TRAILS", Loot.owned_items("trail"))
-	var tip := _label("想要更多皮肤？去「开箱 CASES」用金币开箱。重复物品会自动换成金币。", 16, Color(0.7, 0.7, 0.75))
+	header.text = tr("BP_HEADER") % [owned, total, Loot.cases_opened, str(Global.coins)]
+	_section(tr("BP_PADDLES"), Loot.owned_items("paddle"))
+	_section(tr("BP_TRAILS"), Loot.owned_items("trail"))
+	var tip := _label(tr("BP_TIP"), 16, Color(0.7, 0.7, 0.75))
 	content.add_child(tip)
 
 func _section(title: String, items: Array):
@@ -72,16 +72,16 @@ func make_card(item: Dictionary) -> Control:
 			tr.position = Vector2(18, 52); tr.size = Vector2(CARD.x - 36, 26)
 			card.add_child(tr)
 		else:
-			var none := _label("(无拖尾 no trail)", 14, Color(0.6, 0.6, 0.65)); none.position = Vector2(0, 52); none.size = Vector2(CARD.x, 24)
+			var none := _label(tr("BP_NO_TRAIL"), 14, Color(0.6, 0.6, 0.65)); none.position = Vector2(0, 52); none.size = Vector2(CARD.x, 24)
 			none.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; card.add_child(none)
-	var name_l := _label(item["name"], 15, Color.WHITE); name_l.position = Vector2(4, 120); name_l.size = Vector2(CARD.x - 8, 22)
+	var name_l := _label(tr(item["name"]), 15, Color.WHITE); name_l.position = Vector2(4, 120); name_l.size = Vector2(CARD.x - 8, 22)
 	name_l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; name_l.clip_text = true; card.add_child(name_l)
-	var r_l := _label("%s %s" % [rarity["cn"], rarity["name"]], 12, rarity["color"]); r_l.position = Vector2(4, 144); r_l.size = Vector2(CARD.x - 8, 20)
+	var r_l := _label(tr(rarity["name"]), 13, rarity["color"]); r_l.position = Vector2(4, 144); r_l.size = Vector2(CARD.x - 8, 20)
 	r_l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; card.add_child(r_l)
 	var b := Button.new(); b.name = "Equip"
 	b.add_theme_font_override("font", GameFont.get_font()); b.add_theme_font_size_override("font_size", 16)
 	b.position = Vector2(14, 176); b.size = Vector2(CARD.x - 28, 40)
-	b.text = "已装备 ✓" if equipped else "装备 EQUIP"
+	b.text = tr("EQUIPPED") if equipped else tr("EQUIP")
 	b.disabled = equipped
 	var id: String = item["id"]
 	b.pressed.connect(func():

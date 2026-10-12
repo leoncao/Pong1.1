@@ -8,5 +8,5 @@ func _ready():
 func show_high_score(currentScore):
 	if currentScore > highScore:
 		highScore = currentScore
-	$Label.text = "High Score: " + str(highScore)
+	$Label.text = tr("HIGH_SCORE_WIN") % highScore
 	show()

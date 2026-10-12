@@ -1,0 +1,179 @@
+keys,en,zh_CN
+Project Pong,Project Pong,乒乓计划
+CLASSIC,CLASSIC,经典模式
+HARDCORE,HARDCORE,硬核模式
+BACKPACK,BACKPACK,背包
+CASES,CASES,开箱
+HOW TO PLAY,HOW TO PLAY,玩法说明
+CREDIT,CREDIT,制作人员
+QUIT,QUIT,退出
+PATCH NOTE,PATCH NOTE,更新日志
+GAME PAUSED,GAME PAUSED,游戏暂停
+RESUME,RESUME,继续
+MAIN MENU,MAIN MENU,主菜单
+OPTIONS,OPTIONS,选项
+Ready,Ready,准备
+Game Over,Game Over,游戏结束
+You Win!,You Win!,你赢了！
+RESTART,RESTART,重新开始
+BACK,BACK,返回
+OK,OK,确定
+LANG_TOGGLE,中文,English
+HOWTO_BODY,"Welcome to Pong!
+
+Controls
+- Move up: Up Arrow
+- Move down: Down Arrow
+- Hold Right Arrow: move forward and charge a power shot
+  (release when the ball hits your paddle)
+- Esc: pause
+
+How to win
+Classic: reach 30 points and beat the final boss
+Hardcore: survive as long as you can to earn coins,
+then open cases for paddle skins and ball trails
+
+Good luck!","欢迎来到乒乓！
+
+操作
+- 向上：↑ 方向键
+- 向下：↓ 方向键
+- 按住 → 方向键：向前移动并蓄力
+  （球碰到球拍时松开，打出蓄力快球）
+- Esc：暂停
+
+怎样获胜
+经典模式：拿到 30 分，打败最终 BOSS
+硬核模式：尽量活得久，赚金币，
+然后去「开箱」获得球拍皮肤和球拖尾
+
+祝你好运！"
+WHATSNEW_BODY,"What's new — Version 2.0
+
+- Upgraded to Godot 4
+- Cases: CS2-style case opening for paddle skins and ball trails
+- Backpack: see and equip everything you own
+- Power-ups: long paddle, multiball, slow opponent
+- Charged power shot (hold Right Arrow)
+- Boss skills: decoy balls and darkness
+- Moving bricks and portals as you level up
+- Smarter AI that predicts the ball; the winner of each point serves
+- Full Chinese / English support (toggle on the main menu)","更新内容 —— 2.0 版
+
+- 升级到 Godot 4
+- 开箱：CS2 风格开箱，获得球拍皮肤和球拖尾
+- 背包：查看并装备你拥有的所有物品
+- 道具：长球拍、多球、对手减速
+- 蓄力快球（按住 → 方向键）
+- BOSS 技能：假球和黑暗
+- 升级后出现移动砖块和传送门
+- 更聪明的 AI（会预判球路）；每一分由得分方发球
+- 完整中英文支持（主菜单可切换）"
+CREDIT_BODY,"Credit
+
+Tutorial / Assets
+https://www.youtube.com/@ClearCode
+
+Sound
+Smooth Strings.wav by BuytheField
+Level Up / Mission Complete by Beetlemuse
+
+Programming / Code
+Special thanks to our AI companion, Microsoft Copilot.","制作人员
+
+教程 / 素材
+https://www.youtube.com/@ClearCode
+
+音效
+Smooth Strings.wav（BuytheField）
+Level Up / Mission Complete（Beetlemuse）
+
+编程 / 代码
+特别感谢我们的 AI 伙伴 Microsoft Copilot。"
+A game by Loveying Studio,A game by Loveying Studio,Loveying Studio 出品
+Tutorial,Tutorial,教程
+Programming,Programming,编程
+UI,UI,界面
+Music,Music,音乐
+Sound Effects,Sound Effects,音效
+Tools used,Tools used,使用工具
+Developed with Godot Engine,Developed with Godot Engine,使用 Godot 引擎开发
+MODE_CLASSIC,Mode: Classic,模式：经典
+MODE_HARDCORE,Mode: Hardcore,模式：硬核
+LEVEL_REACHED,You reached Level %d,升到第 %d 级！
+BOSS_APPEARS,THE BOSS APPEARS,BOSS 出现了！
+CUR_SCORE,Current Score: %d,当前得分：%d
+HIGH_SCORE,Highest Score: %d,最高得分：%d
+TOTAL_COINS,Total Coins: %s,金币总数：%s
+SCORE_SUMMARY,"Current Score: %d
+Highest Score: %d
+Coins Earned: %s","本局得分：%d
+最高得分：%d
+获得金币：%s"
+HIGH_SCORE_WIN,High Score: %d,最高分：%d
+CRAZY_AI_MISSED,AI missed! +5 points — serve again,AI 漏球！+5 分，重新发球
+CRAZY_EXTRA_MISSED,Extra ball lost — combo reset,额外的球漏了，连击清零
+HUD_HINT,Hold → to charge a power shot,按住 → 蓄力回击
+HUD_CLASSIC_SUB,SCORE   ·   LEVEL %d/6   ·   AI %d/30,得分   ·   等级 %d/6   ·   对手 %d/30
+HUD_BOSS_FIGHT,!! BOSS FIGHT — 1 point to win !!,!! BOSS 出现！再得 1 分获胜 !!
+HUD_BOSS_SOON,Boss incoming — %d to go,BOSS 即将来临 —— 还差 %d 分
+HUD_CRAZY_SUB,SCORE %d   ·   BEST %d   ·   COINS +%.1f,得分 %d   ·   最高 %d   ·   本局金币 +%.1f
+HUD_COMBO,COMBO %d   coins ×%.1f,连击 %d   金币 ×%.1f
+WHO_YOU,(YOU),(你)
+WHO_AI,(AI),(对手)
+BOSS_SKILLS,BOSS SKILLS: decoys + darkness!,BOSS 技能：假球 + 黑暗！
+NEW_BRICK,NEW: moving brick,新障碍：移动砖块
+NEW_PORTALS,NEW: portals,新障碍：传送门
+POWERUPS_ON,POWER-UPS ON!,道具出现！
+PU_LONG,LONG PADDLE,长球拍
+PU_MULTI,MULTIBALL,多球
+PU_SLOW,SLOW OPPONENT,对手减速
+PU_LONG_ICON,L,长
+PU_MULTI_ICON,×3,×3
+PU_SLOW_ICON,S,慢
+Pong Case,PONG CASE,乒乓箱
+CASE_OPEN,OPEN CASE  (%d + KEY %d COINS),开箱（%d + 钥匙 %d 金币）
+CASE_COINS,Coins: %s,金币：%s
+CASE_DUP,Duplicate! Converted to +%d coins,重复物品！已换成 +%d 金币
+CASE_NEW,New item! Added to your backpack,新物品！已放进背包
+EQUIP,EQUIP,装备
+EQUIPPED,EQUIPPED ✓,已装备 ✓
+BP_HEADER,Collected %d/%d   ·   Cases opened %d   ·   Coins %s,已收集 %d/%d   ·   开过箱子 %d   ·   金币 %s
+BP_PADDLES,PADDLE SKINS,球拍皮肤
+BP_TRAILS,BALL TRAILS,球拖尾
+BP_TIP,Want more skins? Open cases in CASES. Duplicates turn into coins.,想要更多皮肤？去「开箱」用金币开箱。重复物品会自动换成金币。
+BP_NO_TRAIL,(no trail),（无拖尾）
+Mil-Spec,Mil-Spec,军规级
+Restricted,Restricted,受限
+Classified,Classified,保密
+Covert,Covert,隐秘
+Rare Special,★ Rare Special,★ 稀有特殊
+Default,Default,默认
+Door,Door,木门
+Cadpat,Cadpat,数码迷彩
+Star,Star,星星
+Trail | Ocean,Trail | Ocean,拖尾 | 海洋
+Green Door,Green Door,绿色木门
+Green Cadpat,Green Cadpat,绿色迷彩
+Star Scale,Star Scale,星之鳞
+Trail | Violet,Trail | Violet,拖尾 | 紫罗兰
+The Boss,The Boss,大 BOSS
+Trail | Neon,Trail | Neon,拖尾 | 霓虹
+Final Boss,Final Boss,最终 BOSS
+Leveling Rod,Leveling Rod,水准尺
+Trail | Fire,Trail | Fire,拖尾 | 烈焰
+★ Evil Boss,★ Evil Boss,★ 邪恶 BOSS
+★ Hidden Boss,★ Hidden Boss,★ 隐藏 BOSS
+★ Skull,★ Skull,★ 骷髅
+★ Trail | Gold,★ Trail | Gold,★ 拖尾 | 黄金
+ACH_UNLOCKED,Achievement Unlocked: %s,成就解锁：%s
+First Win,First Win,首胜
+Win your first game.,Win your first game.,赢下你的第一局。
+Winning Streak,Winning Streak,连胜
+Win 3 games in a row.,Win 3 games in a row.,连续赢 3 局。
+Point Master,Point Master,得分大师
+Score 10 points in a single game.,Score 10 points in a single game.,一局内得到 10 分。
+Shutout Game,Shutout Game,零封
+Win a game without letting the opponent score.,Win a game without letting the opponent score.,不让对手得分赢下一局。
+Devoted Player,Devoted Player,忠实玩家
+Play 10 games.,Play 10 games.,玩 10 局。

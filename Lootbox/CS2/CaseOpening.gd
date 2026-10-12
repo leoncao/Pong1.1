@@ -36,7 +36,7 @@ func _build_ui():
 	theme = preload("res://Mechanics/UiStyle.gd").make_theme()   # 明确的按钮样式（见 UiStyle.gd）
 	var bg := ColorRect.new(); bg.color = Color("15161c"); bg.set_anchors_preset(Control.PRESET_FULL_RECT); add_child(bg)
 
-	var title := _label(Loot.CASES[case_id]["name"].to_upper(), 40, Color.WHITE)
+	var title := _label(tr(Loot.CASES[case_id]["name"]), 40, Color.WHITE)
 	title.position = Vector2(0, 40); title.size = Vector2(1280, 60)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	add_child(title)
@@ -55,15 +55,15 @@ func _build_ui():
 	marker.color = Color("ffd23f"); marker.size = Vector2(4, 190); marker.position = Vector2(REEL_W / 2 - 2, 0)
 	reel_window.add_child(marker)
 
-	open_button = _button("OPEN CASE  (%d + KEY %d COINS)" % [Loot.CASES[case_id]["price"], Loot.CASES[case_id]["key_price"]], Vector2(440, 420), Vector2(400, 55))
+	open_button = _button(tr("CASE_OPEN") % [Loot.CASES[case_id]["price"], Loot.CASES[case_id]["key_price"]], Vector2(440, 420), Vector2(400, 55))
 	open_button.pressed.connect(_on_open_pressed)
-	var inv_btn := _button("背包 BACKPACK", Vector2(440, 490), Vector2(195, 45)); inv_btn.pressed.connect(_go_backpack)
-	var back_btn := _button("BACK", Vector2(645, 490), Vector2(195, 45)); back_btn.pressed.connect(_on_back_pressed)
+	var inv_btn := _button(tr("BACKPACK"), Vector2(440, 490), Vector2(195, 45)); inv_btn.pressed.connect(_go_backpack)
+	var back_btn := _button(tr("BACK"), Vector2(645, 490), Vector2(195, 45)); back_btn.pressed.connect(_on_back_pressed)
 
 	# 概率表
 	var y := 560.0
 	for t in Loot.RARITIES:
-		var l := _label("■ %s (%s)  %.2f%%" % [t["name"], t["cn"], t["weight"]], 16, t["color"])
+		var l := _label("■ %s  %.2f%%" % [tr(t["name"]), t["weight"]], 16, t["color"])
 		l.position = Vector2(40, y); add_child(l); y += 24
 
 	tick_player = AudioStreamPlayer.new(); tick_player.stream = load("res://assets/ping_pong_8bit_beeep.ogg"); tick_player.volume_db = -8; add_child(tick_player)
@@ -80,7 +80,7 @@ func _button(text: String, pos: Vector2, sz: Vector2) -> Button:
 	var b := Button.new(); b.text = text; b.position = pos; b.size = sz; add_child(b); return b
 
 func _refresh_coins():
-	coins_label.text = "Coins: %s" % str(Global.coins)
+	coins_label.text = tr("CASE_COINS") % str(Global.coins)
 	open_button.disabled = spinning or Global.coins < Loot.case_cost(case_id)
 
 # 一张物品卡片：深色底 + 底部稀有度颜色条 + 图片 + 名字
@@ -105,7 +105,7 @@ func make_card(item: Dictionary) -> Control:
 		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		tr.position = Vector2(15, 45); tr.size = Vector2(CARD_W - 30, 24)
 		card.add_child(tr)
-	var name_l := _label(item["name"], 13, Color.WHITE)
+	var name_l := _label(tr(item["name"]), 13, Color.WHITE)
 	name_l.position = Vector2(0, 112); name_l.size = Vector2(CARD_W, 20)
 	name_l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_l.clip_text = true
@@ -167,16 +167,16 @@ func _show_reveal(result: Dictionary):
 	popup.add_theme_stylebox_override("panel", sb)
 	popup.position = Vector2(390, 150); popup.custom_minimum_size = Vector2(500, 380)
 	var vb := VBoxContainer.new(); vb.alignment = BoxContainer.ALIGNMENT_CENTER; popup.add_child(vb)
-	var t1 := _label("%s (%s)" % [tier["name"], tier["cn"]], 22, tier["color"]); t1.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; vb.add_child(t1)
+	var t1 := _label(tr(tier["name"]), 22, tier["color"]); t1.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; vb.add_child(t1)
 	var card := make_card(item); var holder := CenterContainer.new(); holder.add_child(card); vb.add_child(holder)
-	var t2 := _label(item["name"], 28, Color.WHITE); t2.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; vb.add_child(t2)
-	var msg := "重复物品！已换成 +%d 金币" % result["refund"] if result["duplicate"] else "新物品！已放进背包"
+	var t2 := _label(tr(item["name"]), 28, Color.WHITE); t2.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; vb.add_child(t2)
+	var msg := tr("CASE_DUP") % result["refund"] if result["duplicate"] else tr("CASE_NEW")
 	var t3 := _label(msg, 18, Color("ffd23f") if result["duplicate"] else Color("7CFC9A")); t3.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; vb.add_child(t3)
 	var hb := HBoxContainer.new(); hb.alignment = BoxContainer.ALIGNMENT_CENTER; vb.add_child(hb)
 	if not result["duplicate"]:
-		var eq := Button.new(); eq.text = "EQUIP"; eq.pressed.connect(func(): Loot.equip(item["id"]); eq.text = "EQUIPPED ✓"; eq.disabled = true); hb.add_child(eq)
-	var bp := Button.new(); bp.text = "背包 BACKPACK"; bp.pressed.connect(_go_backpack); hb.add_child(bp)
-	var ok := Button.new(); ok.text = "OK"; ok.pressed.connect(func(): popup.queue_free(); popup = null); hb.add_child(ok)
+		var eq := Button.new(); eq.text = tr("EQUIP"); eq.pressed.connect(func(): Loot.equip(item["id"]); eq.text = tr("EQUIPPED"); eq.disabled = true); hb.add_child(eq)
+	var bp := Button.new(); bp.text = tr("BACKPACK"); bp.pressed.connect(_go_backpack); hb.add_child(bp)
+	var ok := Button.new(); ok.text = tr("OK"); ok.pressed.connect(func(): popup.queue_free(); popup = null); hb.add_child(ok)
 	add_child(popup)
 	# 弹出动画：从小变大
 	popup.pivot_offset = popup.custom_minimum_size / 2; popup.scale = Vector2(0.6, 0.6)

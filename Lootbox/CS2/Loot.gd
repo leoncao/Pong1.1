@@ -18,8 +18,8 @@ const RARITIES := [
 # 物品池：type = "paddle"(球拍皮肤，用现有图片) 或 "trail"(球拖尾，用颜色生成)
 const ITEMS := [
 	# 默认物品：所有人一开始就有，不会从箱子里开出来
-	{"id": "paddle_initialboss", "name": "Default · 默认",  "type": "paddle", "tier": -1, "default": true, "texture": "res://assets/Paddle/initialboss_pub.png"},
-	{"id": "trail_none",         "name": "Default · 默认",  "type": "trail",  "tier": -1, "default": true, "colors": []},
+	{"id": "paddle_initialboss", "name": "Default",  "type": "paddle", "tier": -1, "default": true, "texture": "res://assets/Paddle/initialboss_pub.png"},
+	{"id": "trail_none",         "name": "Default",  "type": "trail",  "tier": -1, "default": true, "colors": []},
 	{"id": "paddle_door",        "name": "Door",            "type": "paddle", "tier": 0, "texture": "res://assets/Paddle/door.png"},
 	{"id": "paddle_cadpat",      "name": "Cadpat",          "type": "paddle", "tier": 0, "texture": "res://assets/Paddle/paddle_cadpat.png"},
 	{"id": "paddle_star",        "name": "Star",            "type": "paddle", "tier": 0, "texture": "res://assets/Paddle/star.png"},
