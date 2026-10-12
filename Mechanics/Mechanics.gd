@@ -197,8 +197,11 @@ func all_balls() -> Array:
 
 func _new_ball(at: Vector2, vel: Vector2, spd: float, groups: Array) -> Node:
 	var b = ball_scene.instantiate()
-	game.add_child(b)
+	# 先把位置设好再放进场景！以前是先 add_child 再移动，
+	# 球会在 (0,0) —— 左边球门里 —— 待一个物理帧，被左墙当成"进球"立刻删掉（多球、假球都因此消失）
+	b.position = game.to_local(at) if game is Node2D else at
 	for g in groups: b.add_to_group(g)
+	game.add_child(b)
 	b.global_position = at
 	b.velocity = vel
 	b.speed = spd

@@ -10,9 +10,7 @@ var header: Label
 
 func _ready():
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	var th: Theme = load("res://assets/UI/Theme/UI.tres").duplicate()
-	th.default_font = GameFont.get_font()
-	theme = th
+	theme = preload("res://Mechanics/UiStyle.gd").make_theme()   # 明确的按钮样式（见 UiStyle.gd）
 	var bg := ColorRect.new(); bg.color = Color("14151b"); bg.set_anchors_preset(Control.PRESET_FULL_RECT); add_child(bg)
 	var title := _label("背包 / BACKPACK", 40, Color.WHITE); title.position = Vector2(40, 18); add_child(title)
 	header = _label("", 18, Color(0.8, 0.8, 0.85)); header.position = Vector2(44, 76); add_child(header)

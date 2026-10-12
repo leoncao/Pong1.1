@@ -33,9 +33,7 @@ func _ready():
 # ---------- 界面搭建（用代码生成，方便初学者一处看完） ----------
 func _build_ui():
 	set_anchors_preset(Control.PRESET_FULL_RECT)
-	var th: Theme = load("res://assets/UI/Theme/UI.tres").duplicate()   # 用游戏原有的按钮样式
-	th.default_font = GameFont.get_font()
-	theme = th
+	theme = preload("res://Mechanics/UiStyle.gd").make_theme()   # 明确的按钮样式（见 UiStyle.gd）
 	var bg := ColorRect.new(); bg.color = Color("15161c"); bg.set_anchors_preset(Control.PRESET_FULL_RECT); add_child(bg)
 
 	var title := _label(Loot.CASES[case_id]["name"].to_upper(), 40, Color.WHITE)
